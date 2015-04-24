@@ -1,17 +1,45 @@
 package edu.washington.ruokua.quizdroid;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
+public class MainActivity extends  AppCompatActivity  {
+    public String[] heroes = {"Iron Man", "Batman", "Superman", "Thor", "Condorman"};
 
-public class MainActivity extends ActionBarActivity {
+    private ListView theList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        theList = (ListView) findViewById(R.id.lstSummerHeroes);
+
+        // ArrayAdaptor will implements all the appropriate data for a given String
+
+        // @ First parameter is a context. It's the hook back to the Android environment.
+        // The context will 99.9% of the time be the activity where it will be taking place.
+        // @ Second parameter will be a resource.
+        ArrayAdapter<String> items = new ArrayAdapter<String>(this, R.layout.topic_list_item, heroes);
+        // ArrayAdapter<String> items = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, heroes);
+        theList.setAdapter(items);
+
+        // The point is that if the user clicks the list for any amount of time, we will...
+        theList.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Go bring some other activity around the item selected
+                Toast.makeText(MainActivity.this, "You selected position " + position + " which is " + heroes[position], Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
 
