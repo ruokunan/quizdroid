@@ -3,9 +3,6 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.util.List;
 
@@ -54,21 +51,40 @@ public class QuizDroidModel extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent launchingIntent = getIntent();
-        int curProblemNum = 0;
+        int numProblem = getNumProblem();
+        int score = 0;
+        
         int topicIndex = launchingIntent.getIntExtra("topicIndex", -1);
-
-        int questionNum = launchingIntent.getIntExtra("questionNum", -1);
+        boolean takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
+        boolean showAnswer = launchingIntent.getBooleanExtra("answer", false);
+        int questionNum = 0;
         if (topicIndex == -1) {
             displayTopic();
-        } else if (questionNum == -1) {
+        } else if (!takeQuiz) {
             topic = TOPICS[topicIndex];
             displayTopicDesc();
-        } else if () {
+        } else if (takeQuiz && questionNum < numProblem) {
+            topic = TOPICS[topicIndex];
 
+            Intent Question = new Intent(QuizDroidModel.this, QuizQuestions.class);
+            Question curQuestion = getCurrentProblem(questionNum);
+            Question.putExtra("questionDesc", curQuestion.getDesc());
+            List<String> options = curQuestion.getOptions();
+            for(int i = 0; i < options.size();i++) {
+                Question.putExtra("option".concat(Integer.toString(i)), options.get(i));
+
+            }
+            startActivity(Question);
+
+
+        } else if(showAnswer){
+
+        } else {
 
         }
     }
@@ -95,16 +111,12 @@ public class QuizDroidModel extends AppCompatActivity {
         startActivity(topicDesc);
     }
 
-    private void sendQuestion() {
 
-    }
 
     private int getNumProblem() {
         if (topic.equals("math")) {
-
             return NUM_MATH_QUESTIONS;
         } else if (topic.equals("physics")) {
-
             return NUM_PHYSICS_QUESTIONS;
         } else {
 
