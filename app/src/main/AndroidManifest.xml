@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat" >
         <activity
-            android:name=".MainActivity"
+            android:name=".QuizDroidModel"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +21,10 @@
             android:label="@string/topic_front_page" >
         </activity>
         <activity
-            android:name=".QuizQuestions"
-            android:label="@string/title_activity_quiz_questions" >
+            android:name=".AppFrontPage"
+            android:label="@string/app_name" >
         </activity>
+
     </application>
 
 </manifest>

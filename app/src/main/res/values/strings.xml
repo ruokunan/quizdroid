@@ -8,6 +8,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="quiz_begin">Begin</string>
     <string name="title_activity_quiz_questions">QuizQuestions</string>
+    <string name="title_activity_quiz_droid_model">QuizDroidModel</string>
 
 
 </resources>

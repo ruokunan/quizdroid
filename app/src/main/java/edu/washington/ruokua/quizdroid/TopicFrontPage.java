@@ -16,7 +16,7 @@ public class TopicFrontPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent launchingIntent = getIntent();
         String topic = launchingIntent.getStringExtra("topic");
-        String description = launchingIntent.getStringExtra("description");
+        String description = launchingIntent.getStringExtra("desc");
 
         Toast.makeText(this, topic, Toast.LENGTH_SHORT).show();
 
@@ -39,6 +39,17 @@ public class TopicFrontPage extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent topicChoose = new Intent(this,
+                QuizDroidModel.class);
+        topicChoose.putExtra("topicIndex", -1);
+        startActivity(topicChoose);
+
+
+    }
 
 
 }
