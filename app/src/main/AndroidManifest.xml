@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".TopicFrontPage"
-            android:label="@string/title_activity_math_topic_front_page" >
+            android:label="@string/topic_front_page" >
         </activity>
     </application>
 

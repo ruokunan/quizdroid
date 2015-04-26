@@ -3,35 +3,39 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class TopicFrontPage extends AppCompatActivity {
-
+    Button startButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent launchingIntent = getIntent();
         String topic = launchingIntent.getStringExtra("topic");
+        String description = launchingIntent.getStringExtra("description");
+
         Toast.makeText(this, topic, Toast.LENGTH_SHORT).show();
-        switch (topic) {
-            case  "Physics":
-                setContentView(R.layout.physics_topic_overview);
-                break;
-            case  "Marvel Super Heroes":
-                setContentView(R.layout.marvel_topic_overview);
-                break;
 
-            case "Computer Science":
-                setContentView(R.layout.computer_topic_overview);
-                break;
+        setContentView(R.layout.topic_overview);
 
-            case  "Math" :
-                setContentView(R.layout.math_topic_overview);
-                break;
+        TextView quizTopic = (TextView)findViewById(R.id.quizTopic);
+        quizTopic.setText(topic);
+        TextView topicDesc = (TextView)findViewById(R.id.topicDesc);
+        topicDesc.setText(description);
+
+        startButton = (Button)findViewById(R.id.btnStart);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
 
 
-        }
+            });
 
     }
 

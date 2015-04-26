@@ -13,7 +13,23 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
     // A list of different topics on which allow user to take quiz
-    private String[] topics = {"Math", "Physics", "Marvel Super Heroes", "Computer Science"};
+    private String[] topics = {"Math", "Physics", "Marvel Super Heroes"};
+    private final String MATH_DESC = "the abstract science of number, quantity, " +
+            "and space. Mathematics may be studied in its own right ( pure mathematics )," +
+            "or as it is applied to other disciplines such as physics and " +
+            "engineering ( applied mathematics ).";
+
+    private final String PHYSICS_DESC = "the branch of science concerned with the nature and " +
+            "properties of matter and energy. The subject matter of physics, distinguished from " +
+            "that of chemistry and biology, includes mechanics, heat, light and other radiation, " +
+            "sound, electricity, magnetism, and the structure of atoms.";
+
+    private final String MARVEL_DESC = "The Marvel Super Heroes is an American / Canadian " +
+            "animated television series starring five comic-book superheroes from Marvel Comics." +
+            " The first TV series based on Marvel characters," +
+            " it debuted in syndication on U.S. television in 1966. ";
+    private String[] description = {MATH_DESC, PHYSICS_DESC,MARVEL_DESC};
+
     //The view of topic
     private ListView topicList;
 
@@ -38,14 +54,15 @@ public class MainActivity extends AppCompatActivity {
         topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        Intent topicFrontPage = new Intent(MainActivity.this,
-                                TopicFrontPage.class);
-                        topicFrontPage.putExtra("topic", topics[position]);
-                        startActivity(topicFrontPage);
+                Intent topicFrontPage = new Intent(MainActivity.this,
+                        TopicFrontPage.class);
+                topicFrontPage.putExtra("topic", topics[position]);
+                topicFrontPage.putExtra("description", description[position]);
+
+                startActivity(topicFrontPage);
 
 
-
-                }
+            }
         });
 
 
