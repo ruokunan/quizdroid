@@ -38,8 +38,6 @@ public class QuizDroidModel extends AppCompatActivity {
     private final int NUM_MARVEL_QUESTIONS = 0;
 
 
-
-
     private final String[] TOPICS = {"Math", "Physics", "Marvel Super Heroes"};
 
 
@@ -54,10 +52,10 @@ public class QuizDroidModel extends AppCompatActivity {
     private QuestionList currentQuestion;
 
     private int numQuestion;
-    private String topic ="";
+    private String topic = "";
     private boolean takeQuiz;
     private int questionNum = 0;
-    private  int topicIndex = -1;
+    private int topicIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,55 +63,51 @@ public class QuizDroidModel extends AppCompatActivity {
         Intent launchingIntent = getIntent();
 
         int score = 0;
-        if(savedInstanceState != null) {
-            Log.e(TAG, "WO CAO NI MA SHA BI JIAO SHOU");
-        }
-
-        if(savedInstanceState == null) {
-
-            takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
-            topicIndex = Math.max(topicIndex, launchingIntent.getIntExtra("topicIndex", -1));
 
 
-            Log.e(TAG, topicIndex + "");
-            Log.e(TAG, topic);
-
-            boolean showAnswer = launchingIntent.getBooleanExtra("answer", false);
-
-            if (topicIndex == -1) {
-                displayTopic();
-
-                Log.i(TAG, "go front");
-
-            } else if (!takeQuiz) {
-                topic = TOPICS[topicIndex];
-                displayTopicDesc();
-
-                Log.i(TAG, "go topic");
-
-            } else if (questionNum < numQuestion) {
-                if (currentQuestion == null) {
-                    currentQuestion = getCurrentQuestions();
-                }
-                Log.i(TAG, "go problem");
-
-                Intent sendQuestion = new Intent(QuizDroidModel.this, QuizQuestions.class);
-                sendQuestion.putExtra("questionDesc", currentQuestion.getDesc(questionNum));
-                List<String> options = currentQuestion.getOption(questionNum);
-                for (int i = 0; i < options.size(); i++) {
-                    sendQuestion.putExtra("questionOption".concat(Integer.toString(i)), options.get(i));
-
-                }
-                startActivity(sendQuestion);
+        takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
+        topicIndex = Math.max(topicIndex, launchingIntent.getIntExtra("topicIndex", -1));
 
 
-            } else if (showAnswer) {
-                showAnswer = false;
+        Log.e(TAG, topicIndex + "");
+        Log.e(TAG, topic);
 
-            } else {
+        boolean showAnswer = launchingIntent.getBooleanExtra("answer", false);
+
+        if (topicIndex == -1) {
+            displayTopic();
+
+            Log.i(TAG, "go front");
+
+        } else if (!takeQuiz) {
+            topic = TOPICS[topicIndex];
+            displayTopicDesc();
+
+            Log.i(TAG, "go topic");
+
+        } else if (questionNum < numQuestion) {
+            if (currentQuestion == null) {
+                currentQuestion = getCurrentQuestions();
+            }
+            Log.i(TAG, "go problem");
+
+            Intent sendQuestion = new Intent(QuizDroidModel.this, QuizQuestions.class);
+            sendQuestion.putExtra("questionDesc", currentQuestion.getDesc(questionNum));
+            List<String> options = currentQuestion.getOption(questionNum);
+            for (int i = 0; i < options.size(); i++) {
+                sendQuestion.putExtra("questionOption".concat(Integer.toString(i)), options.get(i));
 
             }
+            startActivity(sendQuestion);
+
+
+        } else if (showAnswer) {
+            showAnswer = false;
+
+        } else {
+
         }
+
     }
 
 
@@ -142,7 +136,7 @@ public class QuizDroidModel extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart(){
+    protected void onRestart() {
         super.onRestart();
         Log.i(TAG, "onRestart event fired.");
         Log.e(TAG, topicIndex + "");
@@ -164,26 +158,23 @@ public class QuizDroidModel extends AppCompatActivity {
         super.onDestroy();
 
 
-
-
-
     }
-
 
 
     @Override
     protected void onSaveInstanceState(Bundle saveInstanceState) {
-        super.onSaveInstanceState(saveInstanceState);
         Log.e(TAG, "cao cao cao");
-        saveInstanceState.putInt("topicIndex",topicIndex);
+        saveInstanceState.putInt("topicIndex", topicIndex);
 
-        saveInstanceState.putString("topic",topic);
-        saveInstanceState.putInt("numQuestion",numQuestion);
-        saveInstanceState.putInt("questionNum",questionNum);
+        saveInstanceState.putString("topic", topic);
+        saveInstanceState.putInt("numQuestion", numQuestion);
+        saveInstanceState.putInt("questionNum", questionNum);
 
         saveInstanceState.putBoolean("takeQuiz", takeQuiz);
+        super.onSaveInstanceState(saveInstanceState);
 
     }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -192,7 +183,7 @@ public class QuizDroidModel extends AppCompatActivity {
         topicIndex = savedInstanceState.getInt("topicIndex");
         topic = savedInstanceState.getString("topic");
         numQuestion = savedInstanceState.getInt("numQuestion");
-        questionNum =  savedInstanceState.getInt("questionNum");
+        questionNum = savedInstanceState.getInt("questionNum");
         takeQuiz = savedInstanceState.getBoolean("takeQuiz");
     }
 
@@ -282,7 +273,7 @@ public class QuizDroidModel extends AppCompatActivity {
                 "2",
                 "6",
                 "0"));
-        mathQuestions = new QuestionList(desc,options,answers);
+        mathQuestions = new QuestionList(desc, options, answers);
     }
 
 
