@@ -11,7 +11,7 @@
 
 
     <TextView
-        android:id="@+id/question_text"
+        android:id="@+id/desc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -28,31 +28,27 @@
         android:textSize="12pt">
 
         <RadioButton
-            android:id="@+id/button0"
+            android:id="@+id/option0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:tag="0" />
 
         <RadioButton
-            android:id="@+id/button1"
+            android:id="@+id/option1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:tag="1" />
 
         <RadioButton
-            android:id="@+id/button2"
+            android:id="@+id/option3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:tag="2" />
 
         <RadioButton
-            android:id="@+id/button3"
+            android:id="@+id/option4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:tag="3" />
     </RadioGroup>
 
@@ -66,11 +62,11 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/radioGroup"
         android:layout_marginTop="46dp"
-
+        android:visibility="invisible"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="@string/quiz_begin" />
+        android:text="@string/quiz_submit"/>
 
 </LinearLayout>

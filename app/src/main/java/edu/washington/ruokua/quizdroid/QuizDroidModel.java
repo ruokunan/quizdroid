@@ -3,8 +3,13 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 
 public class QuizDroidModel extends AppCompatActivity {
@@ -26,11 +31,13 @@ public class QuizDroidModel extends AppCompatActivity {
             " it debuted in syndication on U.S. television in 1966. ";
 
 
-    private final int NUM_MATH_QUESTIONS = 0;
+    private final int NUM_MATH_QUESTIONS = 3;
 
     private final int NUM_PHYSICS_QUESTIONS = 0;
 
     private final int NUM_MARVEL_QUESTIONS = 0;
+
+
 
 
     private final String[] TOPICS = {"Math", "Physics", "Marvel Super Heroes"};
@@ -38,55 +45,155 @@ public class QuizDroidModel extends AppCompatActivity {
 
     private static final String TAG = QuizDroidModel.class.getName();
 
-    private List<Question> mathQuestions;
+    private QuestionList mathQuestions;
 
-    private List<Question> physicsQuestions;
+    private QuestionList physicsQuestions;
 
-    private List<Question> marvelQuestions;
+    private QuestionList marvelQuestions;
 
-    private List<Question> currentQuestion;
+    private QuestionList currentQuestion;
 
-
-    private String topic;
-
-
-
+    private int numQuestion;
+    private String topic ="";
+    private boolean takeQuiz;
+    private int questionNum = 0;
+    private  int topicIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent launchingIntent = getIntent();
-        int numProblem = getNumProblem();
-        int score = 0;
-        
-        int topicIndex = launchingIntent.getIntExtra("topicIndex", -1);
-        boolean takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
-        boolean showAnswer = launchingIntent.getBooleanExtra("answer", false);
-        int questionNum = 0;
-        if (topicIndex == -1) {
-            displayTopic();
-        } else if (!takeQuiz) {
-            topic = TOPICS[topicIndex];
-            displayTopicDesc();
-        } else if (takeQuiz && questionNum < numProblem) {
-            topic = TOPICS[topicIndex];
 
-            Intent Question = new Intent(QuizDroidModel.this, QuizQuestions.class);
-            Question curQuestion = getCurrentProblem(questionNum);
-            Question.putExtra("questionDesc", curQuestion.getDesc());
-            List<String> options = curQuestion.getOptions();
-            for(int i = 0; i < options.size();i++) {
-                Question.putExtra("option".concat(Integer.toString(i)), options.get(i));
+        int score = 0;
+        if(savedInstanceState != null) {
+            Log.e(TAG, "WO CAO NI MA SHA BI JIAO SHOU");
+        }
+
+        if(savedInstanceState == null) {
+
+            takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
+            topicIndex = Math.max(topicIndex, launchingIntent.getIntExtra("topicIndex", -1));
+
+
+            Log.e(TAG, topicIndex + "");
+            Log.e(TAG, topic);
+
+            boolean showAnswer = launchingIntent.getBooleanExtra("answer", false);
+
+            if (topicIndex == -1) {
+                displayTopic();
+
+                Log.i(TAG, "go front");
+
+            } else if (!takeQuiz) {
+                topic = TOPICS[topicIndex];
+                displayTopicDesc();
+
+                Log.i(TAG, "go topic");
+
+            } else if (questionNum < numQuestion) {
+                if (currentQuestion == null) {
+                    currentQuestion = getCurrentQuestions();
+                }
+                Log.i(TAG, "go problem");
+
+                Intent sendQuestion = new Intent(QuizDroidModel.this, QuizQuestions.class);
+                sendQuestion.putExtra("questionDesc", currentQuestion.getDesc(questionNum));
+                List<String> options = currentQuestion.getOption(questionNum);
+                for (int i = 0; i < options.size(); i++) {
+                    sendQuestion.putExtra("questionOption".concat(Integer.toString(i)), options.get(i));
+
+                }
+                startActivity(sendQuestion);
+
+
+            } else if (showAnswer) {
+                showAnswer = false;
+
+            } else {
 
             }
-            startActivity(Question);
-
-
-        } else if(showAnswer){
-
-        } else {
-
         }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart event fired.");
+        Log.e(TAG, topicIndex + "");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume event fired.");
+        Log.e(TAG, topicIndex + "");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause event fired.");
+        Log.e(TAG, topicIndex + "");
+
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.i(TAG, "onRestart event fired.");
+        Log.e(TAG, topicIndex + "");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop event fired.");
+        Log.e(TAG, topicIndex + "");
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(TAG, "onDestroy event fired.");
+        Log.e(TAG, "We're going down, Captain!");
+        super.onDestroy();
+
+
+
+
+
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        Log.e(TAG, "cao cao cao");
+        saveInstanceState.putInt("topicIndex",topicIndex);
+
+        saveInstanceState.putString("topic",topic);
+        saveInstanceState.putInt("numQuestion",numQuestion);
+        saveInstanceState.putInt("questionNum",questionNum);
+
+        saveInstanceState.putBoolean("takeQuiz", takeQuiz);
+
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.e(TAG, "cao ni ma cao ni ma cao ni ma cao ni ma ");
+
+        topicIndex = savedInstanceState.getInt("topicIndex");
+        topic = savedInstanceState.getString("topic");
+        numQuestion = savedInstanceState.getInt("numQuestion");
+        questionNum =  savedInstanceState.getInt("questionNum");
+        takeQuiz = savedInstanceState.getBoolean("takeQuiz");
     }
 
 
@@ -105,68 +212,77 @@ public class QuizDroidModel extends AppCompatActivity {
         String desc = getCurrentDesc();
         topicDesc.putExtra("desc", desc);
 
-        int numQuestion =getNumProblem();
-        topicDesc.putExtra("numProblem", desc);
+        numQuestion = getNumProblem();
+        topicDesc.putExtra("numProblem", numQuestion);
 
         startActivity(topicDesc);
     }
 
 
-
     private int getNumProblem() {
-        if (topic.equals("math")) {
-            return NUM_MATH_QUESTIONS;
-        } else if (topic.equals("physics")) {
-            return NUM_PHYSICS_QUESTIONS;
-        } else {
+        switch (topic) {
+            case "math":
+                return NUM_MATH_QUESTIONS;
+            case "physics":
+                return NUM_PHYSICS_QUESTIONS;
+            default:
 
-            return NUM_MARVEL_QUESTIONS;
+                return NUM_MARVEL_QUESTIONS;
         }
     }
 
     private String getCurrentDesc() {
-        if (topic.equals("math")) {
+        switch (topic) {
+            case "math":
 
-            return MATH_DESC;
-        } else if (topic.equals("physics")) {
+                return MATH_DESC;
+            case "physics":
 
-            return PHYSICS_DESC;
-        } else {
+                return PHYSICS_DESC;
+            default:
 
-            return MARVEL_DESC;
+                return MARVEL_DESC;
         }
     }
-    private List<Question> getCurrentQuestions() {
-        if (topic.equals("math")) {
-            if (mathQuestions == null) {
-                setMathQuestions();
-            }
 
-            return mathQuestions;
-        } else if (topic.equals("physics")) {
-            if (physicsQuestions == null) {
-                setPhysicsQuestions();
-            }
-            return physicsQuestions;
-        } else {
-            if (marvelQuestions == null) {
-                setMarvelQuestions();
-            }
-            return marvelQuestions;
+    private QuestionList getCurrentQuestions() {
+        switch (topic) {
+            case "math":
+                if (mathQuestions == null) {
+                    setMathQuestions();
+                }
+
+                return mathQuestions;
+            case "physics":
+                if (physicsQuestions == null) {
+                    setPhysicsQuestions();
+                }
+                return physicsQuestions;
+            default:
+                if (marvelQuestions == null) {
+                    setMarvelQuestions();
+                }
+                return marvelQuestions;
         }
 
-    }
-
-    private Question getCurrentProblem(int numQuestion ) {
-        if (currentQuestion == null) {
-            getCurrentQuestions();
-        }
-        return currentQuestion.get(numQuestion);
     }
 
 
     private void setMathQuestions() {
-
+        List<String> desc = new ArrayList<>(Arrays.asList(
+                "1 + 1 = ?",
+                "2 * 3 = ?",
+                "10 % 10 = ?"));
+        List<List<String>> options = asList(
+                asList("1", "2", "3", "4"),
+                asList("3", "4", "5", "6"),
+                asList("0", "1", "2", "3")
+        );
+        List<String> answers = new ArrayList<>(Arrays.asList(
+                "2",
+                "6",
+                "0"));
+        mathQuestions = new QuestionList(desc,options,answers);
     }
 
 
@@ -179,30 +295,43 @@ public class QuizDroidModel extends AppCompatActivity {
 
     }
 
-    private class Question {
-        private String desc;
-        private String answer;
-        private List<String> options;
 
-        private Question(String desc, List<String> options, String answer) {
+    private class QuestionList {
+        private List<String> desc;
+        private List<List<String>> option;
+        private List<String> answer;
+        int numQuestion;
+
+        private QuestionList(List<String> desc, List<List<String>> option, List<String> answer) {
+            if (desc.size() != option.size() || desc.size() != answer.size()) {
+                throw new IllegalArgumentException();
+            }
             this.desc = desc;
-            this.options = options;
+            this.option = option;
             this.answer = answer;
+            numQuestion = desc.size();
         }
 
-        public String getDesc() {
-            return desc;
+        public String getDesc(int problemNumber) {
+            if (problemNumber < 0 || problemNumber > numQuestion) {
+                return "";
+            }
+            return desc.get(problemNumber);
         }
 
-        public String getAnswer() {
-            return answer;
+        public List<String> getOption(int problemNumber) {
+            if (problemNumber < 0 || problemNumber > numQuestion) {
+                return new ArrayList<String>();
+            }
+            return option.get(problemNumber);
         }
 
-        public List<String> getOptions() {
-            return options;
+        public String getAnswer(int problemNumber) {
+            if (problemNumber < 0 || problemNumber > numQuestion) {
+                return "";
+            }
+            return answer.get(problemNumber);
         }
-
-
     }
 
 

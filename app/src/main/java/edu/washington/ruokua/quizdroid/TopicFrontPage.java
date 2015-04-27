@@ -31,7 +31,9 @@ public class TopicFrontPage extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent takeQuiz = new Intent(TopicFrontPage.this, QuizDroidModel.class);
+                takeQuiz.putExtra("takeQuiz", true);
+                startActivity(takeQuiz);
             }
 
 
@@ -42,11 +44,11 @@ public class TopicFrontPage extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
-        Intent topicChoose = new Intent(this,
-                QuizDroidModel.class);
-        topicChoose.putExtra("topicIndex", -1);
-        startActivity(topicChoose);
+//        super.onBackPressed();
+//        Intent topicChoose = new Intent(this,
+//                QuizDroidModel.class);
+//        topicChoose.putExtra("topicIndex", -1);
+//        startActivity(topicChoose);
 
 
     }

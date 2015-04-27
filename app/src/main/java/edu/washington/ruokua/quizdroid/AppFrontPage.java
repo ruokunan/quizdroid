@@ -45,6 +45,8 @@ public class AppFrontPage extends AppCompatActivity {
                 Intent topicChoose = new Intent(AppFrontPage.this,
                         QuizDroidModel.class);
                 topicChoose.putExtra("topicIndex", position);
+                topicChoose.putExtra("descTopic", true);
+
                 startActivity(topicChoose);
 
 

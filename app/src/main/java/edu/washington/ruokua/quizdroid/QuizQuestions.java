@@ -1,17 +1,60 @@
 package edu.washington.ruokua.quizdroid;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 
-public class QuizQuestions extends ActionBarActivity {
+public class QuizQuestions extends AppCompatActivity {
+    public final Button submit = (Button) findViewById(R.id.btnSubmit);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_questions);
+
+        Intent launchingIntent = getIntent();
+        String desc = launchingIntent.getStringExtra("questionDesc");
+
+        TextView problemDesc = (TextView) findViewById(R.id.desc);
+        problemDesc.setText(desc);
+
+
+
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                submit.setVisibility(View.VISIBLE);
+                Log.e("XXXXXX", checkedId + "");
+            }
+        });
+
+        for (int i = 0; i < 4; i++) {
+            String option = launchingIntent.getStringExtra("questionOption"
+                    .concat(Integer.toString(i)));
+            ((RadioButton) radioGroup.getChildAt(i)).setText(option);
+        }
+
+
+    }
+
+
+    /**
+     * Disable the bcak button in this acitivity
+     */
+    @Override
+    public void onBackPressed() {
+
+
     }
 
 
