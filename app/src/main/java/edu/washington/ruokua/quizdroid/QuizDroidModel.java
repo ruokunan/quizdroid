@@ -1,6 +1,7 @@
 package edu.washington.ruokua.quizdroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,12 +17,12 @@ public class QuizDroidModel extends AppCompatActivity {
 
 
     private final String MATH_DESC = "the abstract science of number, quantity, " +
-            "and space. Mathematics may be studied in its own right ( pure mathematics )," +
-            "or as it is applied to other disciplines such as physics and " +
-            "engineering ( applied mathematics ).";
+            "and space. Mathematics may be studied in its own right ( pure Mathematics )," +
+            "or as it is applied to other disciplines such as Physics and " +
+            "engineering ( applied Mathematics ).";
 
     private final String PHYSICS_DESC = "the branch of science concerned with the nature and " +
-            "properties of matter and energy. The subject matter of physics, distinguished from " +
+            "properties of matter and energy. The subject matter of Physics, distinguished from " +
             "that of chemistry and biology, includes mechanics, heat, light and other radiation, " +
             "sound, electricity, magnetism, and the structure of atoms.";
 
@@ -31,11 +32,14 @@ public class QuizDroidModel extends AppCompatActivity {
             " it debuted in syndication on U.S. television in 1966. ";
 
 
-    private final int NUM_MATH_QUESTIONS = 3;
+    private final int NUM_Math_QUESTIONS = 3;
 
-    private final int NUM_PHYSICS_QUESTIONS = 0;
+    private final int NUM_Physics_QUESTIONS = 0;
 
     private final int NUM_MARVEL_QUESTIONS = 0;
+
+    public static final String PREFS_NAME = "MyPrefsFile";
+
 
 
     private final String[] TOPICS = {"Math", "Physics", "Marvel Super Heroes"};
@@ -43,9 +47,9 @@ public class QuizDroidModel extends AppCompatActivity {
 
     private static final String TAG = QuizDroidModel.class.getName();
 
-    private QuestionList mathQuestions;
+    private QuestionList MathQuestions;
 
-    private QuestionList physicsQuestions;
+    private QuestionList PhysicsQuestions;
 
     private QuestionList marvelQuestions;
 
@@ -64,14 +68,31 @@ public class QuizDroidModel extends AppCompatActivity {
 
         int score = 0;
 
+        // Restore preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean silent = settings.getBoolean("silentMode", false);
+       //setSilent(silent);
 
-        takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
-        topicIndex = Math.max(topicIndex, launchingIntent.getIntExtra("topicIndex", -1));
+        Log.e(TAG, " we fuck whore" + questionNum);
 
+        topicIndex = settings.getInt("topicIndex",-1);
+        topic = settings.getString("topic","");
+        numQuestion = settings.getInt("numQuestion", getNumProblem());
+        questionNum = settings.getInt("questionNum", 0);
+        takeQuiz = settings.getBoolean("takeQuiz", false);
+        Log.e(TAG, " we fuck whore" + numQuestion);
+       // topicIndex = -1;
 
         Log.e(TAG, topicIndex + "");
         Log.e(TAG, topic);
+        if(launchingIntent.getIntExtra("topicIndex", -1) != -1) {
+            topicIndex = launchingIntent.getIntExtra("topicIndex", -1);
+        }
+        if(launchingIntent.getBooleanExtra("takeQuiz", false)) {
+            takeQuiz = launchingIntent.getBooleanExtra("takeQuiz", false);
 
+        }
+        Log.e(TAG, "wtf,,,,,,,,,,,,,,,takeQuiz" + takeQuiz);
         boolean showAnswer = launchingIntent.getBooleanExtra("answer", false);
 
         if (topicIndex == -1) {
@@ -80,19 +101,26 @@ public class QuizDroidModel extends AppCompatActivity {
             Log.i(TAG, "go front");
 
         } else if (!takeQuiz) {
-            topic = TOPICS[topicIndex];
-            displayTopicDesc();
 
+            topic = TOPICS[topicIndex];
+            numQuestion =getNumProblem();
+            displayTopicDesc();
             Log.i(TAG, "go topic");
 
-        } else if (questionNum < numQuestion) {
+        } else if (questionNum < getNumProblem()) {
+            Log.e(TAG, "WSDFJIOFJIOEFJSOIJEWFGOOIGJIOWEJGIOWEJGIOWJGIO");
+            topicIndex = -1;
+            takeQuiz = false;
             if (currentQuestion == null) {
                 currentQuestion = getCurrentQuestions();
             }
             Log.i(TAG, "go problem");
+            Log.e(TAG, "xxxxxxxxxxxxxxxxxxxxx");
 
             Intent sendQuestion = new Intent(QuizDroidModel.this, QuizQuestions.class);
+            Log.wtf(TAG,"WTF                          " + questionNum);
             sendQuestion.putExtra("questionDesc", currentQuestion.getDesc(questionNum));
+            Log.e(TAG, "IS THERE ANYANYANYTHING" + currentQuestion.getDesc(questionNum));
             List<String> options = currentQuestion.getOption(questionNum);
             for (int i = 0; i < options.size(); i++) {
                 sendQuestion.putExtra("questionOption".concat(Integer.toString(i)), options.get(i));
@@ -115,7 +143,6 @@ public class QuizDroidModel extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart event fired.");
-        Log.e(TAG, topicIndex + "");
 
     }
 
@@ -123,7 +150,6 @@ public class QuizDroidModel extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume event fired.");
-        Log.e(TAG, topicIndex + "");
 
     }
 
@@ -131,7 +157,6 @@ public class QuizDroidModel extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.i(TAG, "onPause event fired.");
-        Log.e(TAG, topicIndex + "");
 
     }
 
@@ -139,7 +164,6 @@ public class QuizDroidModel extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.i(TAG, "onRestart event fired.");
-        Log.e(TAG, topicIndex + "");
 
     }
 
@@ -147,7 +171,24 @@ public class QuizDroidModel extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.i(TAG, "onStop event fired.");
-        Log.e(TAG, topicIndex + "");
+        // We need an Editor object to make preference changes.
+        // All objects are from android.context.Context
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("silentMode", false);
+
+        editor.putInt("topicIndex", topicIndex);
+
+        editor.putString("topic", topic);
+        editor.putInt("numQuestion", numQuestion);
+        questionNum = 0;
+        editor.putInt("questionNum", questionNum);
+
+        editor.putBoolean("takeQuiz", takeQuiz);
+
+        // Commit the edits!
+        editor.commit();
+
 
     }
 
@@ -163,7 +204,6 @@ public class QuizDroidModel extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle saveInstanceState) {
-        Log.e(TAG, "cao cao cao");
         saveInstanceState.putInt("topicIndex", topicIndex);
 
         saveInstanceState.putString("topic", topic);
@@ -178,7 +218,6 @@ public class QuizDroidModel extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.e(TAG, "cao ni ma cao ni ma cao ni ma cao ni ma ");
 
         topicIndex = savedInstanceState.getInt("topicIndex");
         topic = savedInstanceState.getString("topic");
@@ -212,10 +251,10 @@ public class QuizDroidModel extends AppCompatActivity {
 
     private int getNumProblem() {
         switch (topic) {
-            case "math":
-                return NUM_MATH_QUESTIONS;
-            case "physics":
-                return NUM_PHYSICS_QUESTIONS;
+            case "Math":
+                return NUM_Math_QUESTIONS;
+            case "Physics":
+                return NUM_Physics_QUESTIONS;
             default:
 
                 return NUM_MARVEL_QUESTIONS;
@@ -224,10 +263,10 @@ public class QuizDroidModel extends AppCompatActivity {
 
     private String getCurrentDesc() {
         switch (topic) {
-            case "math":
+            case "Math":
 
                 return MATH_DESC;
-            case "physics":
+            case "Physics":
 
                 return PHYSICS_DESC;
             default:
@@ -238,17 +277,17 @@ public class QuizDroidModel extends AppCompatActivity {
 
     private QuestionList getCurrentQuestions() {
         switch (topic) {
-            case "math":
-                if (mathQuestions == null) {
+            case "Math":
+                if (MathQuestions == null) {
                     setMathQuestions();
                 }
 
-                return mathQuestions;
-            case "physics":
-                if (physicsQuestions == null) {
+                return MathQuestions;
+            case "Physics":
+                if (PhysicsQuestions == null) {
                     setPhysicsQuestions();
                 }
-                return physicsQuestions;
+                return PhysicsQuestions;
             default:
                 if (marvelQuestions == null) {
                     setMarvelQuestions();
@@ -273,7 +312,7 @@ public class QuizDroidModel extends AppCompatActivity {
                 "2",
                 "6",
                 "0"));
-        mathQuestions = new QuestionList(desc, options, answers);
+        MathQuestions = new QuestionList(desc, options, answers);
     }
 
 
@@ -291,7 +330,7 @@ public class QuizDroidModel extends AppCompatActivity {
         private List<String> desc;
         private List<List<String>> option;
         private List<String> answer;
-        int numQuestion;
+        private int questionContain;
 
         private QuestionList(List<String> desc, List<List<String>> option, List<String> answer) {
             if (desc.size() != option.size() || desc.size() != answer.size()) {
@@ -300,25 +339,26 @@ public class QuizDroidModel extends AppCompatActivity {
             this.desc = desc;
             this.option = option;
             this.answer = answer;
-            numQuestion = desc.size();
+            this.questionContain = desc.size();
         }
 
         public String getDesc(int problemNumber) {
-            if (problemNumber < 0 || problemNumber > numQuestion) {
+            if (problemNumber < 0 || problemNumber > questionContain) {
+                Log.wtf(TAG, "is realy return the empty string?" + "PN" + problemNumber);
                 return "";
             }
             return desc.get(problemNumber);
         }
 
         public List<String> getOption(int problemNumber) {
-            if (problemNumber < 0 || problemNumber > numQuestion) {
+            if (problemNumber < 0 || problemNumber > questionContain) {
                 return new ArrayList<String>();
             }
             return option.get(problemNumber);
         }
 
         public String getAnswer(int problemNumber) {
-            if (problemNumber < 0 || problemNumber > numQuestion) {
+            if (problemNumber < 0 || problemNumber > questionContain) {
                 return "";
             }
             return answer.get(problemNumber);

@@ -1,9 +1,13 @@
 package edu.washington.ruokua.quizdroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
@@ -28,27 +32,27 @@ public class AppFrontPage extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-//        Intent launchingIntent = getIntent();
-//        topics = launchingIntent.getStringArrayExtra("topics");
-//
-//        topicList = (ListView) findViewById(R.id.lstTopic);
-//
-//        ArrayAdapter<String> items = new ArrayAdapter<String>(this,
-//                R.layout.topic_list_item, topics);
-//        topicList.setAdapter(items);
+        Intent launchingIntent = getIntent();
+        topics = launchingIntent.getStringArrayExtra("topics");
 
-//        topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Intent topicChoose = new Intent(AppFrontPage.this,
-//                        QuizDroidModel.class);
-//                topicChoose.putExtra("displayTopicDesc", position);
-//
-//                startActivity(topicChoose);
-//
-//
-//            }
-//        });
+        topicList = (ListView) findViewById(R.id.lstTopic);
+
+        ArrayAdapter<String> items = new ArrayAdapter<String>(this,
+                R.layout.topic_list_item, topics);
+        topicList.setAdapter(items);
+
+        topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent topicChoose = new Intent(AppFrontPage.this,
+                        QuizDroidModel.class);
+                topicChoose.putExtra("topicIndex", position);
+
+                startActivity(topicChoose);
+
+
+            }
+        });
 
 
     }

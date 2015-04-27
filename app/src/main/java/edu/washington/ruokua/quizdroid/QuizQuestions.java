@@ -14,16 +14,16 @@ import android.widget.TextView;
 
 
 public class QuizQuestions extends AppCompatActivity {
-    public final Button submit = (Button) findViewById(R.id.btnSubmit);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_questions);
-
+        final Button submit = (Button) findViewById(R.id.btnSubmit);
         Intent launchingIntent = getIntent();
         String desc = launchingIntent.getStringExtra("questionDesc");
-
+        Log.e("WO GAN GUO YANG", "NI ZHE GE SAO BI" + desc);
         TextView problemDesc = (TextView) findViewById(R.id.desc);
         problemDesc.setText(desc);
 
