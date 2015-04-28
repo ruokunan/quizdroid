@@ -3,19 +3,20 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class QuizQuestions extends AppCompatActivity {
+
+public class Question extends AppCompatActivity {
 
     private int select;
     private QuestionList currentQuestions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,19 @@ public class QuizQuestions extends AppCompatActivity {
                 RadioButton radioButton = (RadioButton) findViewById(checkedId);
 
                 select = Integer.parseInt((String)radioButton.getTag());
+
+
+
+                if(currentQuestions.getOption().get(2).equals("Eric Chee") && select == 2) {
+
+
+
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+
                 currentQuestions.setSelect(select);
             }
         });
@@ -47,7 +61,7 @@ public class QuizQuestions extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendQuestions = new Intent(QuizQuestions.this, Answer.class);
+                Intent sendQuestions = new Intent(Question.this, Answer.class);
                 sendQuestions.putExtra("Questions", currentQuestions);
                 startActivity(sendQuestions);
 
@@ -58,6 +72,8 @@ public class QuizQuestions extends AppCompatActivity {
 
 
         });
+
+
 
         for (int i = 0; i < 4; i++) {
             String option = currentQuestions.getOption().get(i);
@@ -73,30 +89,9 @@ public class QuizQuestions extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-
-
+        Toast.makeText(this, "I know you gonna hack", Toast.LENGTH_SHORT).show();
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_quiz_questions, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

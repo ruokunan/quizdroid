@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +13,19 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class TopicFrontPage extends AppCompatActivity {
+/**
+ * A brief description of certain topic,
+ * and the total number of question in certain topic
+ */
+public class TopicOverview extends AppCompatActivity {
+
+   // Hard Code number of Question
+    private final int NUM_Math_QUESTIONS = 3;
+
+    private final int NUM_Physics_QUESTIONS = 3;
+
+    private final int NUM_MARVEL_QUESTIONS = 3;
+
 
 
     private final String MATH_DESC = "the abstract science of number, quantity, " +
@@ -31,11 +42,12 @@ public class TopicFrontPage extends AppCompatActivity {
             "animated television series starring five comic-book superheroes from Marvel Comics." +
             " The first TV series based on Marvel characters," +
             " it debuted in syndication on U.S. television in 1966. ";
+
     private QuestionList MathQuestions;
 
     private QuestionList PhysicsQuestions;
 
-    private QuestionList marvelQuestions;
+    private QuestionList MarvelQuestions;
 
     private String topic;
 
@@ -48,7 +60,6 @@ public class TopicFrontPage extends AppCompatActivity {
         topic = launchingIntent.getStringExtra("topic");
         String description = getCurrentDesc();
 
-        Toast.makeText(this, topic, Toast.LENGTH_SHORT).show();
 
         setContentView(R.layout.topic_overview);
 
@@ -56,12 +67,13 @@ public class TopicFrontPage extends AppCompatActivity {
         quizTopic.setText(topic);
         TextView topicDesc = (TextView)findViewById(R.id.topicDesc);
         topicDesc.setText(description);
-
+        TextView quizNumber = (TextView)findViewById(R.id.quizNumber);
+        quizNumber.setText("Total number of Questions: " + Integer.toString(getNumProblem()));
         startButton = (Button)findViewById(R.id.btnStart);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendQuestions = new Intent(TopicFrontPage.this, QuizQuestions.class);
+                Intent sendQuestions = new Intent(TopicOverview.this, Question.class);
                 sendQuestions.putExtra("Questions", getCurrentQuestions());
                 startActivity(sendQuestions);
 
@@ -70,7 +82,7 @@ public class TopicFrontPage extends AppCompatActivity {
             }
 
 
-            });
+        });
 
 
     }
@@ -88,6 +100,7 @@ public class TopicFrontPage extends AppCompatActivity {
                 return MARVEL_DESC;
         }
     }
+
     private QuestionList getCurrentQuestions() {
         switch (topic) {
             case "Math":
@@ -102,10 +115,10 @@ public class TopicFrontPage extends AppCompatActivity {
                 }
                 return PhysicsQuestions;
             default:
-                if (marvelQuestions == null) {
+                if (MarvelQuestions == null) {
                     setMarvelQuestions();
                 }
-                return marvelQuestions;
+                return MarvelQuestions;
         }
 
     }
@@ -130,26 +143,59 @@ public class TopicFrontPage extends AppCompatActivity {
 
 
     private void setPhysicsQuestions() {
+        List<String> desc = new ArrayList<>(Arrays.asList(
+                "Acceleration of an object due to gravity?",
+                "Acceleration of an object due to gravity in the moon?",
+                "Acceleration of an object due to gravity in the bible?"));
+        List<List<String>> options = asList(
+                asList("9.8 m/s/s", "10 mi/s", "1 in/s", "Magic"),
+                asList("9.8 m/s/s", "1.622 m/s/s10 mi/s", "1 in/s", "I do not know"),
+                asList("guess", "make a guess", "there is no god", "goD bless me")
+        );
+        List<Integer> answers = new ArrayList<>(Arrays.asList(
+                0,
+                1,
+                2));
+        PhysicsQuestions = new QuestionList(desc, options, answers);
 
     }
 
 
     private void setMarvelQuestions() {
+        List<String> desc = new ArrayList<>(Arrays.asList(
+                "The name of batman?",
+                "The name of superman",
+                "The name of batman's car"));
+        List<List<String>> options = asList(
+                asList("batman for sure", "bat-man", "batttttman", "select this, this is right"),
+                asList("I do not know", "SuperMan",
+                        "Eric Chee", "select the third option will cause serious problem" +
+                                " believe me or not"),
+                asList("BatMan Dragster", "Audi", "BMW", "Mustang")
+        );
+        List<Integer> answers = new ArrayList<>(Arrays.asList(
+                1,
+                1,
+                0));
+        MarvelQuestions = new QuestionList(desc, options, answers);
 
     }
 
 
-    @Override
-    public void onBackPressed()
-    {
-//        super.onBackPressed();
-//        Intent topicChoose = new Intent(this,
-//                QuizDroidModel.class);
-//        topicChoose.putExtra("topicIndex", -1);
-//        startActivity(topicChoose);
 
+    private int getNumProblem() {
+        switch (topic) {
+            case "Math":
+                return NUM_Math_QUESTIONS;
+            case "Physics":
+                return NUM_Physics_QUESTIONS;
+            default:
 
+                return NUM_MARVEL_QUESTIONS;
+        }
     }
+
+
 
 
 }

@@ -50,7 +50,7 @@
         android:text="Question Number: 1"
         android:textSize="15dp"
         android:textColor="#068481"
-        android:id="@+id/textView2"
+        android:id="@+id/quizNumber"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -70,7 +70,9 @@
 
 
         android:layout_marginTop="45dp"
-        android:layout_below="@+id/textView2"
+        style="@style/btnStyleSeagull"
+
+        android:layout_below="@+id/quizNumber"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

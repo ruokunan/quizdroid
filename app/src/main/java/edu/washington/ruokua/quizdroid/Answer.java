@@ -3,11 +3,10 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class Answer extends AppCompatActivity {
@@ -54,13 +53,18 @@ public class Answer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 if (currentQuestions.hasNextQuestion()) {
+                    Toast.makeText(Answer.this, "Wait a moment, " +
+                            "I am select question right know", Toast.LENGTH_SHORT).show();
                     currentQuestions.nextQuestion();
-                    Intent sendQuestions = new Intent(Answer.this, QuizQuestions.class);
-                    sendQuestions.putExtra("Questions",currentQuestions);
+                    Intent sendQuestions = new Intent(Answer.this, Question.class);
+                    sendQuestions.putExtra("Questions", currentQuestions);
                     startActivity(sendQuestions);
                 } else {
-                    Intent backToFront = new Intent(Answer.this, AppFrontPage.class);
+                    Toast.makeText(Answer.this, "cotinue to take quiz since you cannot exit",
+                            Toast.LENGTH_SHORT).show();
+                    Intent backToFront = new Intent(Answer.this, TopicList.class);
                     startActivity(backToFront);
                 }
 
@@ -69,26 +73,10 @@ public class Answer extends AppCompatActivity {
         });
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_answer, menu);
-        return true;
+    public void onBackPressed() {
+        Toast.makeText(this, "I know you gonna hack", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
