@@ -45,12 +45,12 @@ public class Question extends AppCompatActivity {
 
                 if(currentQuestions.getOption().get(2).equals("Eric Chee") && select == 2) {
 
-
-
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                      System.exit(1);
+//
+//                    Intent intent = new Intent(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_HOME);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
                 }
 
                 currentQuestions.setSelect(select);
