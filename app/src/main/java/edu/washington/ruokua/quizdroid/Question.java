@@ -43,7 +43,8 @@ public class Question extends AppCompatActivity {
 
 
 
-                if(currentQuestions.getOption().get(2).equals("Eric Chee") && select == 2) {
+                if(currentQuestions.getOption().get(2).equals("Eric Chee(This is a wrong answer and you should never select) "
+                ) && select == 2) {
 
                       System.exit(1);
 //

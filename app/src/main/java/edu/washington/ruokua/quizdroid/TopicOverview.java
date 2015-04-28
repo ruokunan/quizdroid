@@ -19,13 +19,12 @@ import static java.util.Arrays.asList;
  */
 public class TopicOverview extends AppCompatActivity {
 
-   // Hard Code number of Question
+    // Hard Code number of Question
     private final int NUM_Math_QUESTIONS = 3;
 
     private final int NUM_Physics_QUESTIONS = 3;
 
     private final int NUM_MARVEL_QUESTIONS = 3;
-
 
 
     private final String MATH_DESC = "the abstract science of number, quantity, " +
@@ -53,6 +52,7 @@ public class TopicOverview extends AppCompatActivity {
 
 
     Button startButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,20 +63,19 @@ public class TopicOverview extends AppCompatActivity {
 
         setContentView(R.layout.topic_overview);
 
-        TextView quizTopic = (TextView)findViewById(R.id.quizTopic);
+        TextView quizTopic = (TextView) findViewById(R.id.quizTopic);
         quizTopic.setText(topic);
-        TextView topicDesc = (TextView)findViewById(R.id.topicDesc);
+        TextView topicDesc = (TextView) findViewById(R.id.topicDesc);
         topicDesc.setText(description);
-        TextView quizNumber = (TextView)findViewById(R.id.quizNumber);
+        TextView quizNumber = (TextView) findViewById(R.id.quizNumber);
         quizNumber.setText("Total number of Questions: " + Integer.toString(getNumProblem()));
-        startButton = (Button)findViewById(R.id.btnStart);
+        startButton = (Button) findViewById(R.id.btnStart);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sendQuestions = new Intent(TopicOverview.this, Question.class);
                 sendQuestions.putExtra("Questions", getCurrentQuestions());
                 startActivity(sendQuestions);
-
 
 
             }
@@ -169,7 +168,8 @@ public class TopicOverview extends AppCompatActivity {
         List<List<String>> options = asList(
                 asList("batman for sure", "bat-man", "batttttman", "select this, this is right"),
                 asList("I do not know", "SuperMan",
-                        "Eric Chee", "select the third option will cause serious problem" +
+                        "Eric Chee(This is a wrong answer and you should never select) "
+                        , "select the third option will cause serious problem" +
                                 " believe me or not"),
                 asList("BatMan Dragster", "Audi", "BMW", "Mustang")
         );
@@ -180,7 +180,6 @@ public class TopicOverview extends AppCompatActivity {
         MarvelQuestions = new QuestionList(desc, options, answers);
 
     }
-
 
 
     private int getNumProblem() {
@@ -194,8 +193,6 @@ public class TopicOverview extends AppCompatActivity {
                 return NUM_MARVEL_QUESTIONS;
         }
     }
-
-
 
 
 }
