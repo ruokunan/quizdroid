@@ -168,9 +168,8 @@ public class TopicOverview extends AppCompatActivity {
         List<List<String>> options = asList(
                 asList("batman for sure", "bat-man", "batttttman", "select this, this is right"),
                 asList("I do not know", "SuperMan",
-                        "Eric Chee(This is a wrong answer and you should never select) "
-                        , "select the third option will cause serious problem" +
-                                " believe me or not"),
+                        "Eric Chee "
+                        , "Me"),
                 asList("BatMan Dragster", "Audi", "BMW", "Mustang")
         );
         List<Integer> answers = new ArrayList<>(Arrays.asList(

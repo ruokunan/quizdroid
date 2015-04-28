@@ -47,11 +47,6 @@ public class TopicList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent topicDesc = new Intent(TopicList.this, TopicOverview.class);
                 topicDesc.putExtra("topic",  TOPICS[position]);
-                Toast.makeText(TopicList.this, "Wait a moment, " +
-                        "we do not have questions on this topic (this just " +
-                        "a joke)", Toast.LENGTH_SHORT).show();
-
-
                 startActivity(topicDesc);
 
 

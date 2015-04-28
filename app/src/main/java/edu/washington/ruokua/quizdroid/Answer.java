@@ -29,7 +29,8 @@ public class Answer extends AppCompatActivity {
         String answerCorrect = currentQuestions.getOption().get(answerIndex);
 
         String scoreBoard = "You have " + currentQuestions.getScore() + " out of "
-                + currentQuestions.getQuestionContain() + " correct";
+                + (currentQuestions.getQuestionNum() + 1)+ " correct";
+
         String buttonText;
         if (currentQuestions.hasNextQuestion()) {
             buttonText = "Next";
@@ -55,15 +56,13 @@ public class Answer extends AppCompatActivity {
 
 
                 if (currentQuestions.hasNextQuestion()) {
-                    Toast.makeText(Answer.this, "Wait a moment, " +
-                            "I am select question right know", Toast.LENGTH_SHORT).show();
+
                     currentQuestions.nextQuestion();
                     Intent sendQuestions = new Intent(Answer.this, Question.class);
                     sendQuestions.putExtra("Questions", currentQuestions);
                     startActivity(sendQuestions);
                 } else {
-                    Toast.makeText(Answer.this, "cotinue to take quiz since you cannot exit",
-                            Toast.LENGTH_SHORT).show();
+
                     Intent backToFront = new Intent(Answer.this, TopicList.class);
                     startActivity(backToFront);
                 }

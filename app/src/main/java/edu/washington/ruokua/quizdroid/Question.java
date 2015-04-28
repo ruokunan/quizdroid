@@ -41,19 +41,6 @@ public class Question extends AppCompatActivity {
 
                 select = Integer.parseInt((String)radioButton.getTag());
 
-
-
-                if(currentQuestions.getOption().get(2).equals("Eric Chee(This is a wrong answer and you should never select) "
-                ) && select == 2) {
-
-                      System.exit(1);
-//
-//                    Intent intent = new Intent(Intent.ACTION_MAIN);
-//                    intent.addCategory(Intent.CATEGORY_HOME);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-                }
-
                 currentQuestions.setSelect(select);
             }
         });
