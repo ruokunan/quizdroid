@@ -13,14 +13,27 @@ public class QuestionList implements Serializable {
     private List<Integer> answer;
     private int questionContain;
     private int questionNum;
-    private int selectAnswer;
+    private int select;
+    private int score;
 
-    public int getSelectAnswer() {
-        return selectAnswer;
+
+    public void setSelect(int select) {
+        this.select = select;
     }
 
-    public void setSelectAnswer(int selectAnswer) {
-        this.selectAnswer = selectAnswer;
+    public int getSelect() {
+
+        return select;
+    }
+
+    public int addScore() {
+        return score++;
+    }
+
+
+
+    public int getScore() {
+        return score;
     }
 
     public QuestionList(List<String> desc, List<List<String>> option, List<Integer> answer) {
@@ -49,7 +62,7 @@ public class QuestionList implements Serializable {
     }
 
     public boolean hasNextQuestion() {
-        return questionNum < questionContain;
+        return questionNum < questionContain - 1;
     }
 
 

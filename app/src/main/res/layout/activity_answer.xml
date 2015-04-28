@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/answerGiven"
             android:layout_weight="0.5"
+            android:text="Given Answer"
             android:paddingLeft="20dp" />
         <TextView
             android:layout_width="match_parent"
@@ -48,6 +49,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/answer"
+            android:text="correct Answer"
             android:layout_weight="0.5"
             android:textSize="14dp"
             android:paddingLeft="20dp" />
@@ -68,14 +70,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/question_ratio_text"
+            android:id="@+id/scoreBoard"
             android:textSize="16dp"
             android:gravity="center"
+            android:text="scoreBoard"
            />
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Next"
-            android:id="@+id/nextButton" />
+            android:id="@+id/btnNext" />
     </LinearLayout>
 </RelativeLayout>

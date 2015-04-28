@@ -3,7 +3,6 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,8 +39,7 @@ public class QuizQuestions extends AppCompatActivity {
                 RadioButton radioButton = (RadioButton) findViewById(checkedId);
 
                 select = Integer.parseInt((String)radioButton.getTag());
-                currentQuestions.setSelectAnswer(select);
-                Log.e("test", "this is importatn" + select);
+                currentQuestions.setSelect(select);
             }
         });
 
@@ -49,7 +47,7 @@ public class QuizQuestions extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendQuestions = new Intent(QuizQuestions.this, QuizQuestions.class);
+                Intent sendQuestions = new Intent(QuizQuestions.this, Answer.class);
                 sendQuestions.putExtra("Questions", currentQuestions);
                 startActivity(sendQuestions);
 
@@ -62,7 +60,7 @@ public class QuizQuestions extends AppCompatActivity {
         });
 
         for (int i = 0; i < 4; i++) {
-            String option = currentQuestion.getOption().get(i);
+            String option = currentQuestions.getOption().get(i);
             ((RadioButton) radioGroup.getChildAt(i)).setText(option);
         }
 
