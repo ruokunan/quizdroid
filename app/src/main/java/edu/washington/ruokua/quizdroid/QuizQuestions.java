@@ -15,15 +15,18 @@ import android.widget.TextView;
 
 public class QuizQuestions extends AppCompatActivity {
 
-
+    private int select;
+    private QuestionList currentQuestions;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_questions);
         final Button submit = (Button) findViewById(R.id.btnSubmit);
+
         Intent launchingIntent = getIntent();
-        String desc = launchingIntent.getStringExtra("questionDesc");
-        Log.e("WO GAN GUO YANG", "NI ZHE GE SAO BI" + desc);
+        currentQuestions = (QuestionList) launchingIntent.getSerializableExtra("Questions");
+
+        String desc = currentQuestions.getDesc();
         TextView problemDesc = (TextView) findViewById(R.id.desc);
         problemDesc.setText(desc);
 
@@ -34,13 +37,32 @@ public class QuizQuestions extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 submit.setVisibility(View.VISIBLE);
-                Log.e("XXXXXX", checkedId + "");
+                RadioButton radioButton = (RadioButton) findViewById(checkedId);
+
+                select = Integer.parseInt((String)radioButton.getTag());
+                currentQuestions.setSelectAnswer(select);
+                Log.e("test", "this is importatn" + select);
             }
         });
 
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendQuestions = new Intent(QuizQuestions.this, QuizQuestions.class);
+                sendQuestions.putExtra("Questions", currentQuestions);
+                startActivity(sendQuestions);
+
+            }
+
+
+
+
+
+        });
+
         for (int i = 0; i < 4; i++) {
-            String option = launchingIntent.getStringExtra("questionOption"
-                    .concat(Integer.toString(i)));
+            String option = currentQuestion.getOption().get(i);
             ((RadioButton) radioGroup.getChildAt(i)).setText(option);
         }
 
