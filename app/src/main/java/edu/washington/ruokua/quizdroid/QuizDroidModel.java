@@ -3,9 +3,7 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,9 +15,9 @@ import static java.util.Arrays.asList;
  * A brief description of certain topic,
  * and the total number of question in certain topic
  */
-public class TopicOverview extends AppCompatActivity {
+public class QuizDroidModel extends AppCompatActivity {
 
-    // Hard Code number of Question
+    // Hard Code number of QuestionFragment
     private final int NUM_Math_QUESTIONS = 3;
 
     private final int NUM_Physics_QUESTIONS = 3;
@@ -48,45 +46,34 @@ public class TopicOverview extends AppCompatActivity {
 
     private QuestionList MarvelQuestions;
 
+    //private QuestionList currentQuestion;
+
     private String topic;
 
 
-    Button startButton;
+    private Button startQuiz;
+
+    private boolean DESC = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent launchingIntent = getIntent();
         topic = launchingIntent.getStringExtra("topic");
-        String description = getCurrentDesc();
-
-
         setContentView(R.layout.topic_overview);
-
-        TextView quizTopic = (TextView) findViewById(R.id.quizTopic);
-        quizTopic.setText(topic);
-        TextView topicDesc = (TextView) findViewById(R.id.topicDesc);
-        topicDesc.setText(description);
-        TextView quizNumber = (TextView) findViewById(R.id.quizNumber);
-        quizNumber.setText("Total number of Questions: " + Integer.toString(getNumProblem()));
-        startButton = (Button) findViewById(R.id.btnStart);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendQuestions = new Intent(TopicOverview.this, Question.class);
-                sendQuestions.putExtra("Questions", getCurrentQuestions());
-                startActivity(sendQuestions);
-
-
-            }
-
-
-        });
-
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new TopicOverviewFragment())
+                .commit();
 
     }
 
-    private String getCurrentDesc() {
+
+    protected   String getTopic() {
+        return  topic;
+    }
+
+
+    protected String getCurrentDesc() {
         switch (topic) {
             case "Math":
 
@@ -100,7 +87,21 @@ public class TopicOverview extends AppCompatActivity {
         }
     }
 
-    private QuestionList getCurrentQuestions() {
+    protected int getNumProblem() {
+        switch (topic) {
+            case "Math":
+                return NUM_Math_QUESTIONS;
+            case "Physics":
+                return NUM_Physics_QUESTIONS;
+            default:
+
+                return NUM_MARVEL_QUESTIONS;
+        }
+    }
+
+
+
+    public QuestionList getCurrentQuestions() {
         switch (topic) {
             case "Math":
                 if (MathQuestions == null) {
@@ -121,6 +122,7 @@ public class TopicOverview extends AppCompatActivity {
         }
 
     }
+
 
 
     private void setMathQuestions() {
@@ -181,17 +183,7 @@ public class TopicOverview extends AppCompatActivity {
     }
 
 
-    private int getNumProblem() {
-        switch (topic) {
-            case "Math":
-                return NUM_Math_QUESTIONS;
-            case "Physics":
-                return NUM_Physics_QUESTIONS;
-            default:
 
-                return NUM_MARVEL_QUESTIONS;
-        }
-    }
 
 
 }

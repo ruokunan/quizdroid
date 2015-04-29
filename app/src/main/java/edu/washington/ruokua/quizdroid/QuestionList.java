@@ -17,6 +17,7 @@ public class QuestionList implements Serializable {
     private int score;
 
 
+ 
     public void setSelect(int select) {
         this.select = select;
     }
@@ -51,7 +52,7 @@ public class QuestionList implements Serializable {
         return questionNum;
     }
 
-        
+
     public int getQuestionContain() {
         return questionContain;
     }

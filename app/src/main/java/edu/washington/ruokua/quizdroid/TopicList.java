@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * Provide user a list of topic
@@ -45,7 +44,7 @@ public class TopicList extends AppCompatActivity {
 
         topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent topicDesc = new Intent(TopicList.this, TopicOverview.class);
+                Intent topicDesc = new Intent(TopicList.this, QuizDroidModel.class);
                 topicDesc.putExtra("topic",  TOPICS[position]);
                 startActivity(topicDesc);
 

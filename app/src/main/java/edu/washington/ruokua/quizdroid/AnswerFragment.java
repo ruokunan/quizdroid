@@ -2,23 +2,24 @@ package edu.washington.ruokua.quizdroid;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-public class Answer extends AppCompatActivity {
+public class AnswerFragment extends Fragment {
     private QuestionList currentQuestions;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_answer);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        Intent launchingIntent = getIntent();
-        currentQuestions = (QuestionList) launchingIntent.getSerializableExtra("Questions");
+        View view = inflater.inflate(R.layout.fragment_answer, container, false);
+
+        currentQuestions =  ((QuizDroidModel)getActivity()).getCurrentQuestions();
         int answerIndex = currentQuestions.getAnswer();
         int selectIndex = currentQuestions.getSelect();
         if (answerIndex == selectIndex) {
@@ -38,17 +39,17 @@ public class Answer extends AppCompatActivity {
             buttonText = "Finish";
         }
 
-        TextView selectAnswer = (TextView) findViewById(R.id.answerGiven);
+        TextView selectAnswer = (TextView) view.findViewById(R.id.answerGiven);
         selectAnswer.setText(answerGiven);
 
-        TextView correctAnswer = (TextView) findViewById(R.id.answer);
+        TextView correctAnswer = (TextView) view.findViewById(R.id.answer);
         correctAnswer.setText(answerCorrect);
 
-        TextView scoreRatio = (TextView) findViewById(R.id.scoreBoard);
+        TextView scoreRatio = (TextView) view.findViewById(R.id.scoreBoard);
         scoreRatio.setText(scoreBoard);
 
 
-        Button button = (Button) findViewById(R.id.btnNext);
+        Button button = (Button)view.findViewById(R.id.btnNext);
         button.setText(buttonText);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,24 +59,26 @@ public class Answer extends AppCompatActivity {
                 if (currentQuestions.hasNextQuestion()) {
 
                     currentQuestions.nextQuestion();
-                    Intent sendQuestions = new Intent(Answer.this, Question.class);
-                    sendQuestions.putExtra("Questions", currentQuestions);
-                    startActivity(sendQuestions);
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.container, new QuestionFragment())
+                            .commit();
+
+
+
+
                 } else {
 
-                    Intent backToFront = new Intent(Answer.this, TopicList.class);
+                    Intent backToFront = new Intent(getActivity(), TopicList.class);
                     startActivity(backToFront);
                 }
 
             }
 
         });
+        return view;
     }
 
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(this, "I know you gonna hack", Toast.LENGTH_SHORT).show();
-    }
+
 
 
 }
