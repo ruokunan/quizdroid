@@ -59,8 +59,11 @@ public class AnswerFragment extends Fragment {
                 if (currentQuestions.hasNextQuestion()) {
 
                     currentQuestions.nextQuestion();
+
                     getFragmentManager().beginTransaction()
-                            .add(R.id.container, new QuestionFragment())
+                            .setCustomAnimations(R.anim.enter,  R.anim.exit)
+
+                            .replace(R.id.container, new QuestionFragment())
                             .commit();
 
 

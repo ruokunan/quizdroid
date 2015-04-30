@@ -50,7 +50,9 @@ public class QuestionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction()
-                        .add(R.id.container, new AnswerFragment())
+                        .setCustomAnimations(R.anim.enter,  R.anim.exit)
+
+                        .replace(R.id.container, new AnswerFragment())
                         .commit();
 
             }

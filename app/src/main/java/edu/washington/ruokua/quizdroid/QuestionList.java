@@ -17,7 +17,7 @@ public class QuestionList implements Serializable {
     private int score;
 
 
- 
+
     public void setSelect(int select) {
         this.select = select;
     }
