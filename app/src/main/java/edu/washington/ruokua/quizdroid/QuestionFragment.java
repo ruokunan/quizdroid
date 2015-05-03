@@ -10,29 +10,55 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-
+/**
+ * @author ruokunan
+ * Disaply a question to user, contain question description
+ * and answer options allow user to choose
+ * Once the user confrim of her/his choice
+ * Head to answer page show the select/correct answer for that
+ * question
+ *
+ */
 public class QuestionFragment extends Fragment {
-
+    //the current user select answer
     private int select;
+    //the current answer displayed
     private QuestionList currentQuestions;
 
-
+    /**
+     *
+     * {@inheritDoc}
+     * Instantiate a question view, contain question description
+     * and options allow user to choose
+     *
+     *
+     * @returns: the overall topic view to user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_question, container, false);
         final Button submit = (Button) view.findViewById(R.id.btnSubmit);
-;
+
+
         currentQuestions = ((QuizDroidModel)getActivity()).getCurrentQuestions();
 
+        //Display the topic description
         String desc = currentQuestions.getDesc();
         TextView problemDesc = (TextView)  view.findViewById(R.id.desc);
         problemDesc.setText(desc);
 
 
-
+        //Display the options of the question and allow user select
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+
+        for (int i = 0; i < 4; i++) {
+            String option = currentQuestions.getOption().get(i);
+            ((RadioButton) radioGroup.getChildAt(i)).setText(option);
+        }
+
+        //Get the user select answer
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -41,27 +67,24 @@ public class QuestionFragment extends Fragment {
 
                 select = Integer.parseInt((String)radioButton.getTag());
 
-                currentQuestions.setSelect(select);
+                currentQuestions.setCurSelect(select);
             }
         });
 
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        // Once the user confirm the select answer
+        // head user to the answer page
+         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter,  R.anim.exit)
-
                         .replace(R.id.container, new AnswerFragment())
                         .commit();
 
             }
         });
 
-        for (int i = 0; i < 4; i++) {
-            String option = currentQuestions.getOption().get(i);
-            ((RadioButton) radioGroup.getChildAt(i)).setText(option);
-        }
 
         return view;
     }

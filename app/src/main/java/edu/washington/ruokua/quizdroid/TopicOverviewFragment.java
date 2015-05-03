@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
+ * @author ruokunan
  * Displays a brief description of certain Topic
  * The total number of questions in this topic,
  * and button taking user to the first question.
@@ -17,22 +18,15 @@ public class TopicOverviewFragment extends Fragment {
     //when user click button, head to first question of the topic
     private Button startQuiz;
 
-    @Override
+
 
     /**
+     * {@inheritDoc}
      * Instantiate overall topic view
-     *
-     * @param: inflater The LayoutInflater object that can be used to inflate
-     * any views in the fragment
-     *
-     * @param: container  the parent view that the overall topic view should be attached to
-     *
-     * @param: savedInstanceState this fragment is being re-constructed from pervious
-     * saved state as given here
-     *
      *
      * @returns: the overall topic view to user
      */
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
+ * @author ruokunan
  * Provide user a list of topic
  * a user could select one topic to take quiz
  */
@@ -24,10 +25,10 @@ public class TopicList extends AppCompatActivity {
     private ListView topicList;
 
     /**
+     * {@inheritDoc}
+     *
      * Display a List of topics on which allow user to take quiz
      * When user click the topic on the list, head to the overview of that topic
-     * @param savedInstanceState contains the data it most recently
-     *                           supplied in onSaveInstanceState(Bundle)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

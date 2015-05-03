@@ -12,12 +12,13 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 /**
+ * @author ruokunan
  *
  * Provide topic description and number of question in that topic for
- * user selected topic
+ * user selected topic and head to the overview of user select topic
  *
  * Create a list of questions base on the user select topic
- *
+ * if user decided take quiz on that topic
  *
  */
 
@@ -59,12 +60,16 @@ public class QuizDroidModel extends AppCompatActivity {
     private String topic;
 
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //get the user select topic
         Intent launchingIntent = getIntent();
         topic = launchingIntent.getStringExtra("topic");
+        //head to the overview of user select topic
         setContentView(R.layout.topic_overview);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new TopicOverviewFragment())
@@ -141,7 +146,7 @@ public class QuizDroidModel extends AppCompatActivity {
 
 
     /**
-     * initialize a list of math question
+     * initialize a list of math questions
      */
     private void setMathQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
@@ -162,7 +167,7 @@ public class QuizDroidModel extends AppCompatActivity {
 
 
     /**
-     * initialize a list of PhysicsQuestions question
+     * initialize a list of PhysicsQuestions questions
      */ 
     private void setPhysicsQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
@@ -182,8 +187,10 @@ public class QuizDroidModel extends AppCompatActivity {
 
     }
 
-
-    private void setMarvelQuestions() {
+    /**
+     * initialize a list of Marvel questions
+     */
+     private void setMarvelQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "The name of batman?",
                 "The name of superman",
