@@ -25,12 +25,13 @@ public class TopicList extends AppCompatActivity {
 
     /**
      * Display a List of topics on which allow user to take quiz
-     *
+     * When user click the topic on the list, head to the overview of that topic
      * @param savedInstanceState contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.topic_list);
 
@@ -42,6 +43,7 @@ public class TopicList extends AppCompatActivity {
                 R.layout.topic_list_item, TOPICS);
         topicList.setAdapter(items);
 
+        //when user click the topic on the list, head to the overview of the topic
         topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent topicDesc = new Intent(TopicList.this, QuizDroidModel.class);

@@ -12,25 +12,32 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 /**
- * A brief description of certain topic,
- * and the total number of question in certain topic
+ *
+ * Provide topic description and number of question in that topic for
+ * user selected topic
+ *
+ * Create a list of questions base on the user select topic
+ *
+ *
  */
+
 public class QuizDroidModel extends AppCompatActivity {
 
-    // Hard Code number of QuestionFragment
+    //Number of Question in the topic
+    //hard code, allow lazy initialization for the last of question
     private final int NUM_Math_QUESTIONS = 3;
 
     private final int NUM_Physics_QUESTIONS = 3;
 
     private final int NUM_MARVEL_QUESTIONS = 3;
 
-
-    private final String MATH_DESC = "the abstract science of number, quantity, " +
+    //description of the topic
+    private final String MATH_DESC = "The abstract science of number, quantity, " +
             "and space. Mathematics may be studied in its own right ( pure Mathematics )," +
             "or as it is applied to other disciplines such as Physics and " +
             "engineering ( applied Mathematics ).";
 
-    private final String PHYSICS_DESC = "the branch of science concerned with the nature and " +
+    private final String PHYSICS_DESC = "The branch of science concerned with the nature and " +
             "properties of matter and energy. The subject matter of Physics, distinguished from " +
             "that of chemistry and biology, includes mechanics, heat, light and other radiation, " +
             "sound, electricity, magnetism, and the structure of atoms.";
@@ -40,20 +47,18 @@ public class QuizDroidModel extends AppCompatActivity {
             " The first TV series based on Marvel characters," +
             " it debuted in syndication on U.S. television in 1966. ";
 
+    // a list of question of topic
     private QuestionList MathQuestions;
 
     private QuestionList PhysicsQuestions;
 
     private QuestionList MarvelQuestions;
 
-    //private QuestionList currentQuestion;
 
+    //the user select topic
     private String topic;
 
 
-    private Button startQuiz;
-
-    private boolean DESC = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +72,16 @@ public class QuizDroidModel extends AppCompatActivity {
 
     }
 
-
+    /**
+     * @return user select topic
+     */
     protected   String getTopic() {
         return  topic;
     }
 
-
+    /**
+     * @return topic description for user select topic
+     */
     protected String getCurrentDesc() {
         switch (topic) {
             case "Math":
@@ -87,6 +96,10 @@ public class QuizDroidModel extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     * @return number of problems in user select topic
+     */
     protected int getNumProblem() {
         switch (topic) {
             case "Math":
@@ -100,8 +113,11 @@ public class QuizDroidModel extends AppCompatActivity {
     }
 
 
-
-    public QuestionList getCurrentQuestions() {
+    /**
+     *
+     * @return the list of topic for user select topic
+     */
+    protected QuestionList getCurrentQuestions() {
         switch (topic) {
             case "Math":
                 if (MathQuestions == null) {
@@ -124,7 +140,9 @@ public class QuizDroidModel extends AppCompatActivity {
     }
 
 
-
+    /**
+     * initialize a list of math question
+     */
     private void setMathQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "1 + 1 = ?",
@@ -143,6 +161,9 @@ public class QuizDroidModel extends AppCompatActivity {
     }
 
 
+    /**
+     * initialize a list of PhysicsQuestions question
+     */ 
     private void setPhysicsQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "Acceleration of an object due to gravity?",
