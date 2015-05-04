@@ -3,9 +3,7 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,25 +12,33 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 /**
- * A brief description of certain topic,
- * and the total number of question in certain topic
+ * @author ruokunan
+ *
+ * Provide topic description and number of question in that topic for
+ * user selected topic and head to the overview of user select topic
+ *
+ * Create a list of questions base on the user select topic
+ * if user decided take quiz on that topic
+ *
  */
-public class TopicOverview extends AppCompatActivity {
 
-    // Hard Code number of Question
+public class QuizDroidModel extends AppCompatActivity {
+
+    //Number of Question in the topic
+    //hard code, allow lazy initialization for the last of question
     private final int NUM_Math_QUESTIONS = 3;
 
     private final int NUM_Physics_QUESTIONS = 3;
 
     private final int NUM_MARVEL_QUESTIONS = 3;
 
-
-    private final String MATH_DESC = "the abstract science of number, quantity, " +
+    //description of the topic
+    private final String MATH_DESC = "The abstract science of number, quantity, " +
             "and space. Mathematics may be studied in its own right ( pure Mathematics )," +
             "or as it is applied to other disciplines such as Physics and " +
             "engineering ( applied Mathematics ).";
 
-    private final String PHYSICS_DESC = "the branch of science concerned with the nature and " +
+    private final String PHYSICS_DESC = "The branch of science concerned with the nature and " +
             "properties of matter and energy. The subject matter of Physics, distinguished from " +
             "that of chemistry and biology, includes mechanics, heat, light and other radiation, " +
             "sound, electricity, magnetism, and the structure of atoms.";
@@ -42,51 +48,46 @@ public class TopicOverview extends AppCompatActivity {
             " The first TV series based on Marvel characters," +
             " it debuted in syndication on U.S. television in 1966. ";
 
+    // a list of question of topic
     private QuestionList MathQuestions;
 
     private QuestionList PhysicsQuestions;
 
     private QuestionList MarvelQuestions;
 
+
+    //the user select topic
     private String topic;
 
 
-    Button startButton;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //get the user select topic
         Intent launchingIntent = getIntent();
         topic = launchingIntent.getStringExtra("topic");
-        String description = getCurrentDesc();
-
-
+        //head to the overview of user select topic
         setContentView(R.layout.topic_overview);
-
-        TextView quizTopic = (TextView) findViewById(R.id.quizTopic);
-        quizTopic.setText(topic);
-        TextView topicDesc = (TextView) findViewById(R.id.topicDesc);
-        topicDesc.setText(description);
-        TextView quizNumber = (TextView) findViewById(R.id.quizNumber);
-        quizNumber.setText("Total number of Questions: " + Integer.toString(getNumProblem()));
-        startButton = (Button) findViewById(R.id.btnStart);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendQuestions = new Intent(TopicOverview.this, Question.class);
-                sendQuestions.putExtra("Questions", getCurrentQuestions());
-                startActivity(sendQuestions);
-
-
-            }
-
-
-        });
-
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new TopicOverviewFragment())
+                .commit();
 
     }
 
-    private String getCurrentDesc() {
+    /**
+     * @return user select topic
+     */
+    protected   String getTopic() {
+        return  topic;
+    }
+
+    /**
+     * @return topic description for user select topic
+     */
+    protected String getCurrentDesc() {
         switch (topic) {
             case "Math":
 
@@ -100,7 +101,28 @@ public class TopicOverview extends AppCompatActivity {
         }
     }
 
-    private QuestionList getCurrentQuestions() {
+    /**
+     *
+     * @return number of problems in user select topic
+     */
+    protected int getNumProblem() {
+        switch (topic) {
+            case "Math":
+                return NUM_Math_QUESTIONS;
+            case "Physics":
+                return NUM_Physics_QUESTIONS;
+            default:
+
+                return NUM_MARVEL_QUESTIONS;
+        }
+    }
+
+
+    /**
+     *
+     * @return the list of topic for user select topic
+     */
+    protected QuestionList getCurrentQuestions() {
         switch (topic) {
             case "Math":
                 if (MathQuestions == null) {
@@ -123,6 +145,9 @@ public class TopicOverview extends AppCompatActivity {
     }
 
 
+    /**
+     * initialize a list of math questions
+     */
     private void setMathQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "1 + 1 = ?",
@@ -141,6 +166,9 @@ public class TopicOverview extends AppCompatActivity {
     }
 
 
+    /**
+     * initialize a list of PhysicsQuestions questions
+     */ 
     private void setPhysicsQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "Acceleration of an object due to gravity?",
@@ -159,8 +187,10 @@ public class TopicOverview extends AppCompatActivity {
 
     }
 
-
-    private void setMarvelQuestions() {
+    /**
+     * initialize a list of Marvel questions
+     */
+     private void setMarvelQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "The name of batman?",
                 "The name of superman",
@@ -181,17 +211,7 @@ public class TopicOverview extends AppCompatActivity {
     }
 
 
-    private int getNumProblem() {
-        switch (topic) {
-            case "Math":
-                return NUM_Math_QUESTIONS;
-            case "Physics":
-                return NUM_Physics_QUESTIONS;
-            default:
 
-                return NUM_MARVEL_QUESTIONS;
-        }
-    }
 
 
 }

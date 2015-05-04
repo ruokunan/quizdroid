@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.washington.ruokua.quizdroid" >
 
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,16 +20,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TopicOverview"
+            android:name=".QuizDroidModel"
             android:label="@string/topic_front_page" >
         </activity>
-
         <activity
-            android:name=".Question"
+            android:name=".QuestionFragment"
             android:label="@string/title_activity_quiz_questions" >
         </activity>
         <activity
-            android:name=".Answer"
+            android:name=".AnswerFragment"
             android:label="@string/title_activity_answer" >
         </activity>
     </application>
