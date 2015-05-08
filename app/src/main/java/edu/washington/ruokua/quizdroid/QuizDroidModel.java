@@ -3,11 +3,12 @@ package edu.washington.ruokua.quizdroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import edu.washington.ruokua.quizdroid.util.Topic;
 
 import static java.util.Arrays.asList;
 
@@ -49,11 +50,11 @@ public class QuizDroidModel extends AppCompatActivity {
             " it debuted in syndication on U.S. television in 1966. ";
 
     // a list of question of topic
-    private QuestionList MathQuestions;
+    private Topic MathQuestions;
 
-    private QuestionList PhysicsQuestions;
+    private Topic PhysicsQuestions;
 
-    private QuestionList MarvelQuestions;
+    private Topic MarvelQuestions;
 
 
     //the user select topic
@@ -122,7 +123,7 @@ public class QuizDroidModel extends AppCompatActivity {
      *
      * @return the list of topic for user select topic
      */
-    protected QuestionList getCurrentQuestions() {
+    protected Topic getCurrentQuestions() {
         switch (topic) {
             case "Math":
                 if (MathQuestions == null) {
@@ -162,7 +163,7 @@ public class QuizDroidModel extends AppCompatActivity {
                 1,
                 3,
                 0));
-        MathQuestions = new QuestionList(desc, options, answers);
+        MathQuestions = new Topic(desc, options, answers);
     }
 
 
@@ -183,7 +184,7 @@ public class QuizDroidModel extends AppCompatActivity {
                 0,
                 1,
                 2));
-        PhysicsQuestions = new QuestionList(desc, options, answers);
+        PhysicsQuestions = new Topic(desc, options, answers);
 
     }
 
@@ -206,7 +207,7 @@ public class QuizDroidModel extends AppCompatActivity {
                 1,
                 1,
                 0));
-        MarvelQuestions = new QuestionList(desc, options, answers);
+        MarvelQuestions = new Topic(desc, options, answers);
 
     }
 

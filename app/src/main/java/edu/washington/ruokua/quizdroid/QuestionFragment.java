@@ -10,6 +10,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import edu.washington.ruokua.quizdroid.util.Question;
+import edu.washington.ruokua.quizdroid.util.Topic;
+
 /**
  * @author ruokunan
  * Disaply a question to user, contain question description
@@ -23,7 +26,7 @@ public class QuestionFragment extends Fragment {
     //the current user select answer
     private int select;
     //the current answer displayed
-    private QuestionList currentQuestions;
+    private Topic currentTopic;
 
     /**
      *
@@ -42,10 +45,11 @@ public class QuestionFragment extends Fragment {
         final Button submit = (Button) view.findViewById(R.id.btnSubmit);
 
 
-        currentQuestions = ((QuizDroidModel)getActivity()).getCurrentQuestions();
+        currentTopic = ((QuizDroidModel)getActivity()).getCurrentQuestions();
+        Question currentQuestion = currentTopic.getCurrentQuestion();
 
         //Display the topic description
-        String desc = currentQuestions.getDesc();
+        String desc = currentTopic.getCurrentQuestionDesc();
         TextView problemDesc = (TextView)  view.findViewById(R.id.desc);
         problemDesc.setText(desc);
 
@@ -54,7 +58,7 @@ public class QuestionFragment extends Fragment {
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
 
         for (int i = 0; i < 4; i++) {
-            String option = currentQuestions.getOption().get(i);
+            String option = currentTopic.getCurrentQuestionOption().get(i);
             ((RadioButton) radioGroup.getChildAt(i)).setText(option);
         }
 
@@ -67,7 +71,7 @@ public class QuestionFragment extends Fragment {
 
                 select = Integer.parseInt((String)radioButton.getTag());
 
-                currentQuestions.setCurSelect(select);
+                currentTopic.setCurSelect(select);
             }
         });
 

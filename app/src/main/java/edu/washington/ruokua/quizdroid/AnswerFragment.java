@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.washington.ruokua.quizdroid.util.Topic;
+
 
 /**
  *
@@ -21,7 +23,7 @@ import android.widget.TextView;
  */
 
 public class AnswerFragment extends Fragment {
-    private QuestionList currentQuestions;
+    private Topic currentQuestions;
 
     /**
      *
@@ -43,13 +45,13 @@ public class AnswerFragment extends Fragment {
 
         //Display the Select Answer for current problem
         int selectIndex = currentQuestions.getCurSelect();
-        String answerGiven = currentQuestions.getOption().get(selectIndex);
+        String answerGiven = currentQuestions.getCurrentQuestionOption().get(selectIndex);
         TextView selectAnswer = (TextView) view.findViewById(R.id.answerGiven);
         selectAnswer.setText(answerGiven);
 
         //Display the Correct Answer for current Problem
-        int answerIndex = currentQuestions.getAnswer();
-        String answerCorrect = currentQuestions.getOption().get(answerIndex);
+        int answerIndex = currentQuestions.getCurrentQuestionAnswer();
+        String answerCorrect = currentQuestions.getCurrentQuestionOption().get(answerIndex);
         TextView correctAnswer = (TextView) view.findViewById(R.id.answer);
         correctAnswer.setText(answerCorrect);
 
@@ -61,7 +63,7 @@ public class AnswerFragment extends Fragment {
 
         //Display the score board
         String scoreBoard = "You have " + currentQuestions.getScore() + " out of "
-                + (currentQuestions.getQuestionNum() + 1)+ " correct";
+                + (currentQuestions.getQuestionNum())+ " correct";
 
         TextView scoreRatio = (TextView) view.findViewById(R.id.scoreBoard);
         scoreRatio.setText(scoreBoard);

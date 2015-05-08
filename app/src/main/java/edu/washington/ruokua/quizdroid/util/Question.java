@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author ruokunan
  *         <p/>
- *         A Quiz is an immutable object. Represent one question allow
+ *         A Question is an immutable object. Represent one question allow
  *         user to take quiz on. Contain a description of question,
  *         four options allow user to take choices and the correct answer
  *         <p/>
@@ -24,7 +24,7 @@ import java.util.List;
  *                        O(3) = Choice four
  *         The index of correct option = index
  */
-public class Quiz {
+public class Question {
     private String description;
     private List<String> options;
     private int answer;
@@ -55,7 +55,7 @@ public class Quiz {
      * @effects make a new quiz with given question description
      * options, and answer
      */
-    public Quiz(String questions, List<String> options, int answer) {
+    public Question(String questions, List<String> options, int answer) {
         //initialize the quiz
         this.description = questions;
         this.options = options;
