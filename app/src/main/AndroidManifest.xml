@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat" >
         <activity
-            android:name=".TopicList"
+            android:name=".activity.TopicList"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".QuizDroidModel"
+            android:name=".activity.QuizDroidModel"
             android:label="@string/topic_front_page" >
         </activity>
 

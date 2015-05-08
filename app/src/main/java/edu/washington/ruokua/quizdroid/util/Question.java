@@ -75,7 +75,7 @@ public class Question {
     /**
      * @return the description of question
      */
-    public String getQuestions() {
+    public String getDesc() {
         return description;
     }
 

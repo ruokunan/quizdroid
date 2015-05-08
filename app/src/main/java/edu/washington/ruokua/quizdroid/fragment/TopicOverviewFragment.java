@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.R;
 
 /**
  * @author ruokunan

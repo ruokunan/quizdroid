@@ -157,14 +157,14 @@ public class Topic implements Serializable {
     }
 
     /**
-     * @return if the current question is the last question in the topic
+     * @return if the current question is the last question in this topic
      */
     public boolean hasNextQuestion() {
         return curQuestionNum < getNumQuestionContain();
     }
 
     /**
-     * @return the current question user should take quiz on
+     * @return the current question user should take quiz on in this topic
      */
     public Question getCurrentQuestion() {
         return questions.get(curQuestionNum);

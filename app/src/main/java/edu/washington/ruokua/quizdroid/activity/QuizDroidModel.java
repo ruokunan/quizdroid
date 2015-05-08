@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.R;
+import edu.washington.ruokua.quizdroid.fragment.TopicOverviewFragment;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
 import static java.util.Arrays.asList;
@@ -65,7 +67,7 @@ public class QuizDroidModel extends AppCompatActivity {
      * {@inheritDoc}
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //get the user select topic
         Intent launchingIntent = getIntent();
@@ -81,14 +83,14 @@ public class QuizDroidModel extends AppCompatActivity {
     /**
      * @return user select topic
      */
-    protected   String getTopic() {
+    public    String getTopic() {
         return  topic;
     }
 
     /**
      * @return topic description for user select topic
      */
-    protected String getCurrentDesc() {
+    public String getCurrentDesc() {
         switch (topic) {
             case "Math":
 
@@ -106,7 +108,7 @@ public class QuizDroidModel extends AppCompatActivity {
      *
      * @return number of problems in user select topic
      */
-    protected int getNumProblem() {
+    public int getNumProblem() {
         switch (topic) {
             case "Math":
                 return NUM_Math_QUESTIONS;
@@ -123,7 +125,7 @@ public class QuizDroidModel extends AppCompatActivity {
      *
      * @return the list of topic for user select topic
      */
-    protected Topic getCurrentQuestions() {
+    public Topic getCurrentQuestions() {
         switch (topic) {
             case "Math":
                 if (MathQuestions == null) {

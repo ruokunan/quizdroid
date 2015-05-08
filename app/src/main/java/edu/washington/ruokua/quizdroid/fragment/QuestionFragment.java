@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import edu.washington.ruokua.quizdroid.util.Question;
+import java.util.List;
+
+import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
 /**
@@ -31,11 +34,9 @@ public class QuestionFragment extends Fragment {
     /**
      *
      * {@inheritDoc}
-     * Instantiate a question view, contain question description
+     *
+     * @returns: a question view, contain question description
      * and options allow user to choose
-     *
-     *
-     * @returns: the overall topic view to user
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,19 +47,18 @@ public class QuestionFragment extends Fragment {
 
 
         currentTopic = ((QuizDroidModel)getActivity()).getCurrentQuestions();
-        Question currentQuestion = currentTopic.getCurrentQuestion();
 
         //Display the topic description
-        String desc = currentTopic.getCurrentQuestionDesc();
+        String desc = currentTopic.getCurrentQuestion().getDesc();
         TextView problemDesc = (TextView)  view.findViewById(R.id.desc);
         problemDesc.setText(desc);
 
 
         //Display the options of the question and allow user select
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-
-        for (int i = 0; i < 4; i++) {
-            String option = currentTopic.getCurrentQuestionOption().get(i);
+        List<String> options = currentTopic.getCurrentQuestion().getOptions();
+        for (int i = 0; i < options.size(); i++) {
+            String option = options.get(i);
             ((RadioButton) radioGroup.getChildAt(i)).setText(option);
         }
 

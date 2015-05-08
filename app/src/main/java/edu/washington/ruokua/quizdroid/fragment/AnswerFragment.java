@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
+import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.R;
+import edu.washington.ruokua.quizdroid.activity.TopicList;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
 
@@ -23,16 +28,15 @@ import edu.washington.ruokua.quizdroid.util.Topic;
  */
 
 public class AnswerFragment extends Fragment {
-    private Topic currentQuestions;
+    private Topic topic;
 
     /**
      *
      * {@inheritDoc}
-     * Instantiate the Answer view contain the  user select answer for current problem,
+     *
+     * @return the Answer view contain the  user select answer for current problem,
      * correct answer for the current problem and the user's score so far
      *
-
-     * @return an answer page view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,29 +45,31 @@ public class AnswerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_answer, container, false);
 
 
-        currentQuestions =  ((QuizDroidModel)getActivity()).getCurrentQuestions();
+        topic =  ((QuizDroidModel)getActivity()).getCurrentQuestions();
 
         //Display the Select Answer for current problem
-        int selectIndex = currentQuestions.getCurSelect();
-        String answerGiven = currentQuestions.getCurrentQuestionOption().get(selectIndex);
+        int selectIndex = topic.getCurSelect();
+        List<String> options = topic.getCurrentQuestion().getOptions();
+        String answerGiven = options.get(selectIndex);
+
         TextView selectAnswer = (TextView) view.findViewById(R.id.answerGiven);
         selectAnswer.setText(answerGiven);
 
         //Display the Correct Answer for current Problem
-        int answerIndex = currentQuestions.getCurrentQuestionAnswer();
-        String answerCorrect = currentQuestions.getCurrentQuestionOption().get(answerIndex);
+        int answerIndex = topic.getCurrentQuestion().getAnswer();
+        String answerCorrect = options.get(answerIndex);
         TextView correctAnswer = (TextView) view.findViewById(R.id.answer);
         correctAnswer.setText(answerCorrect);
 
-
+        //Add score if user answer correctly
         if (answerIndex == selectIndex) {
-            currentQuestions.addScore();
+            topic.addScore();
         }
 
 
         //Display the score board
-        String scoreBoard = "You have " + currentQuestions.getScore() + " out of "
-                + (currentQuestions.getQuestionNum())+ " correct";
+        String scoreBoard = "You have " + topic.getScore() + " out of "
+                + (topic.getQuestionNum())+ " correct";
 
         TextView scoreRatio = (TextView) view.findViewById(R.id.scoreBoard);
         scoreRatio.setText(scoreBoard);
@@ -72,7 +78,7 @@ public class AnswerFragment extends Fragment {
         //If correct question is not the last question, head user to next question,
         // Otherwise, head to the topic list allow user to select topic take quiz on
         String buttonText;
-        if (currentQuestions.hasNextQuestion()) {
+        if (topic.hasNextQuestion()) {
             buttonText = "Next";
         } else {
             buttonText = "Finish";
@@ -83,13 +89,12 @@ public class AnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (currentQuestions.hasNextQuestion()) {
+                if (topic.hasNextQuestion()) {
 
-                    currentQuestions.nextQuestion();
+                    topic.nextQuestion();
 
                     getFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.enter,  R.anim.exit)
-
                             .replace(R.id.container, new QuestionFragment())
                             .commit();
 
