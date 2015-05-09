@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip">
+
+    <ImageView
+        android:id="@+id/topic_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/topic_title"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@+id/topic_icon"
+        android:layout_alignEnd="@+id/topic_short_desc"
+        android:layout_alignLeft="@+id/topic_short_desc"
+        android:layout_alignRight="@+id/topic_short_desc"
+        android:layout_alignStart="@+id/topic_short_desc"
+        android:text="Math"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/topic_short_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/topic_title"
+        android:layout_marginTop="33dp"
+        android:layout_toEndOf="@+id/topic_icon"
+        android:layout_toRightOf="@+id/topic_icon"
+        android:text="Math is s"
+        android:textSize="12sp" />
+</RelativeLayout>

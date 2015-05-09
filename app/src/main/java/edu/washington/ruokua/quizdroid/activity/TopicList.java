@@ -38,7 +38,7 @@ public class TopicList extends AppCompatActivity {
 
 
         QuizApp quizApp = (QuizApp)getApplication();
-        topicList = (ListView) findViewById(R.id.lstTopic);
+        topicList = (ListView) findViewById(R.id.topic_list);
 
 
         ArrayAdapter<String> items = new ArrayAdapter<String>(this,
