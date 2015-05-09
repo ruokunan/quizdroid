@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
+import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.util.Topic;
 
 /**
  * @author ruokunan
@@ -35,20 +37,26 @@ public class TopicOverviewFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_topic_overview, container, false);
 
+
+        QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
+        QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
+        Topic currentTopic =  quizApp.getRepository().getCurrentTopic(quizApp.getTopicIndex());
+
+
         //Display the quiz topic
-        String topic = ((QuizDroidModel) getActivity()).getTopic();
+        String topic = currentTopic.getTitle();
         TextView quizTopic = (TextView) view.findViewById(R.id.quizTopic);
         quizTopic.setText(topic);
 
         //Display the topic description
-        String description = ((QuizDroidModel) getActivity()).getCurrentDesc();
+        String description = currentTopic.getLongDesc();
         TextView topicDesc = (TextView) view.findViewById(R.id.topicDesc);
         topicDesc.setText(description);
 
         // Display the Total number of quiz questions in the topic
         TextView quizNumber = (TextView) view.findViewById(R.id.quizNumber);
         quizNumber.setText("Total number of Questions: " + Integer.toString((
-                (QuizDroidModel) getActivity()).getNumProblem()));
+              currentTopic.getNumQuestionContain())));
 
         // when click the start button, bring user to the first question of topic
         startQuiz = (Button) view.findViewById(R.id.btnStart);

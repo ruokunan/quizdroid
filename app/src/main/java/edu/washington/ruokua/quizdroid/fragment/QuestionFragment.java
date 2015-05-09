@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.QuizApp;
 import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.util.Topic;
@@ -45,8 +46,9 @@ public class QuestionFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_question, container, false);
         final Button submit = (Button) view.findViewById(R.id.btnSubmit);
 
-
-        currentTopic = ((QuizDroidModel)getActivity()).getCurrentQuestions();
+        QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
+        QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
+        currentTopic =  quizApp.getRepository().getCurrentTopic(quizApp.getTopicIndex());
 
         //Display the topic description
         String desc = currentTopic.getCurrentQuestion().getDesc();

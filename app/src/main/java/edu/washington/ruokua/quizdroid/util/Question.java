@@ -39,13 +39,9 @@ public class Question {
      * otherwise throws an exception
      */
     private void checkRep() {
-        if (options == null || options.size() != OPTIONS_PER_QUESTION) {
-            throw new RuntimeException("option size out of range");
-        } else if (answer < 0 || answer > 4) {
-            throw new RuntimeException("answer index  out of range");
-        } else if (description == null && description.length() > 0) {
-            throw new RuntimeException("question description is not   available ");
-        }
+        assert (options != null || options.size() == OPTIONS_PER_QUESTION);
+        assert (answer > 0 && answer <4);
+        assert (description != null && description.length() > 0);
     }
 
     /**

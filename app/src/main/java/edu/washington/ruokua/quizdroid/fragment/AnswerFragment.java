@@ -11,8 +11,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
+import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
 import edu.washington.ruokua.quizdroid.activity.TopicList;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
@@ -28,7 +29,7 @@ import edu.washington.ruokua.quizdroid.util.Topic;
  */
 
 public class AnswerFragment extends Fragment {
-    private Topic topic;
+    private Topic currentTopic;
 
     /**
      *
@@ -45,40 +46,42 @@ public class AnswerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_answer, container, false);
 
 
-        topic =  ((QuizDroidModel)getActivity()).getCurrentQuestions();
+        QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
+        QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
+        currentTopic =  quizApp.getRepository().getCurrentTopic(quizApp.getTopicIndex());
 
         //Display the Select Answer for current problem
-        int selectIndex = topic.getCurSelect();
-        List<String> options = topic.getCurrentQuestion().getOptions();
+        int selectIndex = currentTopic.getCurSelect();
+        List<String> options = currentTopic.getCurrentQuestion().getOptions();
         String answerGiven = options.get(selectIndex);
 
         TextView selectAnswer = (TextView) view.findViewById(R.id.answerGiven);
         selectAnswer.setText(answerGiven);
 
         //Display the Correct Answer for current Problem
-        int answerIndex = topic.getCurrentQuestion().getAnswer();
+        int answerIndex = currentTopic.getCurrentQuestion().getAnswer();
         String answerCorrect = options.get(answerIndex);
         TextView correctAnswer = (TextView) view.findViewById(R.id.answer);
         correctAnswer.setText(answerCorrect);
 
         //Add score if user answer correctly
         if (answerIndex == selectIndex) {
-            topic.addScore();
+            currentTopic.addScore();
         }
 
 
         //Display the score board
-        String scoreBoard = "You have " + topic.getScore() + " out of "
-                + (topic.getQuestionNum())+ " correct";
+        String scoreBoard = "You have " + currentTopic.getScore() + " out of "
+                + (currentTopic.getQuestionNum())+ " correct";
 
         TextView scoreRatio = (TextView) view.findViewById(R.id.scoreBoard);
         scoreRatio.setText(scoreBoard);
 
 
         //If correct question is not the last question, head user to next question,
-        // Otherwise, head to the topic list allow user to select topic take quiz on
+        // Otherwise, head to the currentTopic list allow user to select currentTopic take quiz on
         String buttonText;
-        if (topic.hasNextQuestion()) {
+        if (currentTopic.hasNextQuestion()) {
             buttonText = "Next";
         } else {
             buttonText = "Finish";
@@ -89,9 +92,9 @@ public class AnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (topic.hasNextQuestion()) {
+                if (currentTopic.hasNextQuestion()) {
 
-                    topic.nextQuestion();
+                    currentTopic.nextQuestion();
 
                     getFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.enter,  R.anim.exit)

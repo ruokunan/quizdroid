@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import edu.washington.ruokua.quizdroid.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
 
 /**
@@ -36,11 +37,12 @@ public class TopicList extends AppCompatActivity {
         setContentView(R.layout.topic_list);
 
 
-
+        QuizApp quizApp = (QuizApp)getApplication();
         topicList = (ListView) findViewById(R.id.lstTopic);
 
+
         ArrayAdapter<String> items = new ArrayAdapter<String>(this,
-                R.layout.topic_list_item, TOPICS);
+                R.layout.topic_list_item, quizApp.getRepository().getTopicList());
         topicList.setAdapter(items);
 
         //when user click the topic on the list, head to the overview of the topic
