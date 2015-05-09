@@ -27,29 +27,7 @@ import static java.util.Arrays.asList;
 
 public class QuizDroidModel extends AppCompatActivity {
 
-    //Number of Question in the topic
-    //hard code, allow lazy initialization for the last of question
-    private final int NUM_Math_QUESTIONS = 3;
 
-    private final int NUM_Physics_QUESTIONS = 3;
-
-    private final int NUM_MARVEL_QUESTIONS = 3;
-
-    //description of the topic
-    private final String MATH_DESC = "The abstract science of number, quantity, " +
-            "and space. Mathematics may be studied in its own right ( pure Mathematics )," +
-            "or as it is applied to other disciplines such as Physics and " +
-            "engineering ( applied Mathematics ).";
-
-    private final String PHYSICS_DESC = "The branch of science concerned with the nature and " +
-            "properties of matter and energy. The subject matter of Physics, distinguished from " +
-            "that of chemistry and biology, includes mechanics, heat, light and other radiation, " +
-            "sound, electricity, magnetism, and the structure of atoms.";
-
-    private final String MARVEL_DESC = "The Marvel Super Heroes is an American / Canadian " +
-            "animated television series starring five comic-book superheroes from Marvel Comics." +
-            " The first TV series based on Marvel characters," +
-            " it debuted in syndication on U.S. television in 1966. ";
 
     // a list of question of topic
     private Topic MathQuestions;
@@ -171,7 +149,7 @@ public class QuizDroidModel extends AppCompatActivity {
 
     /**
      * initialize a list of PhysicsQuestions questions
-     */ 
+     */
     private void setPhysicsQuestions() {
         List<String> desc = new ArrayList<>(Arrays.asList(
                 "Acceleration of an object due to gravity?",
