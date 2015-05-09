@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.QuizApp;
+import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
 import edu.washington.ruokua.quizdroid.activity.TopicList;

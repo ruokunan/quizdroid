@@ -2,6 +2,8 @@ package edu.washington.ruokua.quizdroid.util;
 
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.util.Topic;
+
 /**
  * @author Ruokun An
  * @interface Repository

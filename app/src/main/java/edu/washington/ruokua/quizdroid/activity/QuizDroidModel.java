@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import edu.washington.ruokua.quizdroid.QuizApp;
+import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.fragment.TopicOverviewFragment;
 

@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import edu.washington.ruokua.quizdroid.QuizApp;
+import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
 
 /**
