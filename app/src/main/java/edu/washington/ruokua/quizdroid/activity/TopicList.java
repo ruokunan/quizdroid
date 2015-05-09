@@ -19,9 +19,6 @@ public class TopicList extends AppCompatActivity {
 
 
 
-    // A list of different topics on which allow user to take quiz
-    private final String[] TOPICS = {"Math", "Physics", "Marvel Super Heroes"};
-
 
     //The view of topic
     private ListView topicList;
@@ -50,7 +47,7 @@ public class TopicList extends AppCompatActivity {
         topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent topicDesc = new Intent(TopicList.this, QuizDroidModel.class);
-                topicDesc.putExtra("topic",  TOPICS[position]);
+                topicDesc.putExtra("topicPosition",  position);
                 startActivity(topicDesc);
 
 
