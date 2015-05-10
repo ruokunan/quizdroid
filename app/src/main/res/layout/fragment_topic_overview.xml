@@ -5,6 +5,11 @@
     android:id="@+id/topicOverview"
     android:background="#D2D93B"
     >
+    <ImageView
+        android:id="@+id/topic_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:layout_width = "fill_parent"
@@ -35,11 +40,11 @@
         android:textColor="#068481"
 
         android:id="@+id/topicDesc"
-        android:layout_below="@+id/quizTopic"
         android:text="SSDDD"
+        android:layout_below="@+id/topic_icon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnStart"
+        android:layout_marginTop="48dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -53,9 +58,10 @@
         android:textSize="15dp"
         android:textColor="#068481"
         android:id="@+id/quizNumber"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/topic_icon"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="212dp" />
 
 
 

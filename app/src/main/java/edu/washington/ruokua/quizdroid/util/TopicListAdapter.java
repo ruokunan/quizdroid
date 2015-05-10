@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class TopicListAdapter extends ArrayAdapter<Topic> {
 
     /**
      * {@inheritDoc}
-     * every list item contain a title of topic and a short description of set topic
+     * every list item view contain a title of topic and a short description of set topic
      */
     @Override
     public View getView(int position, View contextView, ViewGroup parent) {
@@ -41,12 +42,13 @@ public class TopicListAdapter extends ArrayAdapter<Topic> {
         contextView = inflater.inflate(R.layout.topic_list_item, parent, false);
 
         TextView topicTitle = (TextView) contextView.findViewById(R.id.topic_title);
-
         topicTitle.setText(getItem(position).getTitle());
-
 
         TextView topicShortDesc = (TextView) contextView.findViewById(R.id.topic_short_desc);
         topicShortDesc.setText(getItem(position).getShortDesc());
+
+        ImageView topicIcon = (ImageView) contextView.findViewById(R.id.topic_icon);
+        topicIcon.setImageResource(getItem(position).getIcon());
         return contextView;
     }
 }

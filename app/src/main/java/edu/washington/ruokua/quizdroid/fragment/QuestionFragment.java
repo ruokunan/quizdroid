@@ -48,7 +48,7 @@ public class QuestionFragment extends Fragment {
 
         QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
         QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
-        currentTopic =  quizApp.getRepository().getCurrentTopic(quizApp.getTopicIndex());
+        currentTopic =  quizApp.getCurrentTopic();
 
         //Display the topic description
         String desc = currentTopic.getCurrentQuestion().getDesc();
