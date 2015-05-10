@@ -3,6 +3,8 @@ package edu.washington.ruokua.quizdroid.util;
 import java.io.Serializable;
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.R;
+
 /**
  * @author ruokunan
  *         <p/>
@@ -68,7 +70,7 @@ public class Topic implements Serializable {
         private String longDesc = null;//optional
         //the questions contained in this topic
         private List<Question> questions = null;//optional
-        private int icon;
+        private int icon = R.drawable.common_signin_btn_icon_dark;
 
 
 

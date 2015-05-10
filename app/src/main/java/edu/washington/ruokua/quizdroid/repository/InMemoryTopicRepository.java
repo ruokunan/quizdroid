@@ -1,8 +1,17 @@
 package edu.washington.ruokua.quizdroid.repository;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.util.Question;
@@ -45,25 +54,62 @@ public class InMemoryTopicRepository implements TopicRepository {
     private QuestionList questionList;
 
 
+    private List<Topic> serverTopics;
+    private JSONArray jsonArray;
+    private String TAG = InMemoryTopicRepository.class.getName();
+
     // A list of different topics on which allow user to take quiz
-    private final List<Topic> topics = new ArrayList<>(Arrays.asList(
-            new Topic.Builder(MATH_TITLE, MATH_SHORT_DESC)
-                    .icon(R.drawable.common_signin_btn_icon_dark).build(),
+    private final List<Topic> inMemoryTopics = new ArrayList<>(Arrays.asList(
+            new Topic.Builder(MATH_TITLE, MATH_SHORT_DESC).build(),
             new Topic.Builder(PHYSICS_TITLE, PHYSICS_SHORT_DESC)
-                    .icon(R.drawable.common_signin_btn_icon_dark).build(),
-            new Topic.Builder(MARVEL_TITLE, MARVEL_SHORT_DESC)
-                    .icon(R.drawable.common_signin_btn_icon_dark).build()
+                    .icon(R.drawable.common_signin_btn_icon_light)
+                    .build(),
+            new Topic.Builder(MARVEL_TITLE, MARVEL_SHORT_DESC).build()
 
     ));
+
 
     /**
      * @effects: initialize an InMemoryTopicRepository with a question list
      */
     public InMemoryTopicRepository() {
+        createTopics();
+
         questionList = new QuestionList();
-        setMarvelTopic();
-        setMathTopic();
-        setMarvelTopic();
+
+    }
+
+
+    private List<Topic> createTopics() {
+        serverTopics = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject jsonTopic = jsonArray.getJSONObject(i);
+                serverTopics.add(new Topic.Builder(jsonTopic.getString("title"),
+                        jsonTopic.getString("desc")).build());
+            } catch (JSONException e) {
+                Log.e(TAG, "Cannot get right Json data");
+                //change to later
+                throw new RuntimeException("Cannot get data from server");
+            }
+
+        }
+        return serverTopics;
+    }
+
+    private List<Topic> createTopics(JSONArray jsonArray, int topicIndex) {
+        serverTopics = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject jsonTopic = jsonArray.getJSONObject(i);
+
+            } catch (JSONException e) {
+                Log.e(TAG, "NO JSON DATA RECEIVED, USE LOCAL DATA INSTEAD");
+                return inMemoryTopics;
+            }
+
+        }
+        return serverTopics;
     }
 
 
@@ -101,7 +147,7 @@ public class InMemoryTopicRepository implements TopicRepository {
      */
     @Override
     public List<Topic> getTopicList() {
-        return topics;
+        return serverTopics;
     }
 
     //initialize math topic
@@ -109,7 +155,6 @@ public class InMemoryTopicRepository implements TopicRepository {
         this.mathTopic = new Topic.Builder(MATH_TITLE, MATH_SHORT_DESC)
                 .longDesc(MATH_LONG_DESC)
                 .questions(questionList.getCurrentQuestions(MATH_TITLE))
-                .icon(R.drawable.common_signin_btn_icon_dark)
                 .build();
     }
 
@@ -117,7 +162,7 @@ public class InMemoryTopicRepository implements TopicRepository {
     private void setPhysicsTopic() {
         this.physicsTopic = new Topic.Builder(PHYSICS_TITLE, PHYSICS_SHORT_DESC)
                 .longDesc(PHYSICS_LONG_DESC)
-                .icon(R.drawable.common_signin_btn_icon_dark)
+                .icon(R.drawable.common_signin_btn_icon_light)
                 .questions(questionList.getCurrentQuestions(PHYSICS_TITLE)).build();
 
     }
@@ -126,7 +171,6 @@ public class InMemoryTopicRepository implements TopicRepository {
     private void setMarvelTopic() {
         this.marvelTopic = new Topic.Builder(MARVEL_TITLE, MARVEL_SHORT_DESC)
                 .longDesc(MARVEL_LONG_DESC)
-                .icon(R.drawable.common_signin_btn_icon_dark)
                 .questions(questionList.getCurrentQuestions(MARVEL_TITLE)).build();
     }
 
@@ -136,14 +180,24 @@ public class InMemoryTopicRepository implements TopicRepository {
         private List<Question> marvelQuestions;
         private List<Question> physicsQuestions;
         private List<Question> mathQuestions;
+        private Map<Integer, List<Question>> jsonQuestions;
 
         //create a new list of question
         public QuestionList() {
             marvelQuestions = null;
             physicsQuestions = null;
             mathQuestions = null;
+            jsonQuestions = new HashMap<>();
         }
 
+
+        public List<Question> getCurrentQuestions(int topicIndex) {
+            if (!jsonQuestions.containsKey(topicIndex)) {
+                jsonQuestions.put(topicIndex, createQuestions(topicIndex));
+            }
+            return jsonQuestions.get(topicIndex);
+
+        }
 
         /**
          * @return the list of Question for user select topic
@@ -246,6 +300,31 @@ public class InMemoryTopicRepository implements TopicRepository {
                 marvelQuestions.add(new Question(desc.get(i), options.get(i), answers.get(i)));
             }
 
+        }
+
+        private List<Question> createQuestions(int topicIndex) {
+            List<Question> questions = new ArrayList<>();
+            try {
+                //Grab the only object within the questions object
+                JSONObject jsonTopic = jsonArray.getJSONObject(topicIndex);
+                JSONObject jsonQuestionsInfo =new JSONArray(jsonTopic.getString("questions")).getJSONObject(0);
+
+
+                String desc = jsonQuestionsInfo.getString("text")); //Get the question text
+                question.setCorrectOption(Integer.parseInt(jsonQuestionsInfo.getString("answer")) - 1); //Parse the correct answer
+                //Create the list of question options
+                JSONArray questionOptions = jsonQuestionsInfo.getJSONArray("answers");
+                ArrayList<String> optionsList = new ArrayList<>(5);
+                for (int i = 0; i < questionOptions.length(); i++) {
+                    optionsList.add(questionOptions.getString(i));
+                }
+                Question question = new Question();
+                question.setOptions(optionsList); //Set the question options
+                questions.add(question);
+            } catch (JSONException e) {
+                Log.e(TAG, "Cannot get right Json data");
+            }
+            return questions;
         }
     }
 }
