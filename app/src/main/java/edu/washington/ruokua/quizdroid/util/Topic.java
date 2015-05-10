@@ -67,7 +67,7 @@ public class Topic implements Serializable {
 
         //Optional Parameters
         //initialized to default values
-        private String longDesc = null;//optional
+        private String longDesc = "This topic lack of long description";//optional
         //the questions contained in this topic
         private List<Question> questions = null;//optional
         private int icon = R.drawable.common_signin_btn_icon_dark;

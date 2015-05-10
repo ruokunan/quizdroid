@@ -56,6 +56,9 @@ public class InMemoryTopicRepository implements TopicRepository {
 
     private List<Topic> serverTopics;
     private JSONArray jsonArray;
+
+    private final int ORDINAL_NUMBER_BIAS = 1;
+
     private String TAG = InMemoryTopicRepository.class.getName();
 
     // A list of different topics on which allow user to take quiz
@@ -81,6 +84,7 @@ public class InMemoryTopicRepository implements TopicRepository {
 
 
     private List<Topic> createTopics() {
+
         serverTopics = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
@@ -97,19 +101,13 @@ public class InMemoryTopicRepository implements TopicRepository {
         return serverTopics;
     }
 
-    private List<Topic> createTopics(JSONArray jsonArray, int topicIndex) {
-        serverTopics = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject jsonTopic = jsonArray.getJSONObject(i);
+    private Topic createTopics(int topicIndex) {
+        String title = serverTopics.get(topicIndex).getTitle();
+        String shortDesc = serverTopics.get(topicIndex).getShortDesc();
+        return new Topic.Builder(title, shortDesc)
+                .questions(questionList.getCurrentQuestions(topicIndex))
+                .build();
 
-            } catch (JSONException e) {
-                Log.e(TAG, "NO JSON DATA RECEIVED, USE LOCAL DATA INSTEAD");
-                return inMemoryTopics;
-            }
-
-        }
-        return serverTopics;
     }
 
 
@@ -304,22 +302,22 @@ public class InMemoryTopicRepository implements TopicRepository {
 
         private List<Question> createQuestions(int topicIndex) {
             List<Question> questions = new ArrayList<>();
+            assert (jsonArray != null);
             try {
                 //Grab the only object within the questions object
                 JSONObject jsonTopic = jsonArray.getJSONObject(topicIndex);
-                JSONObject jsonQuestionsInfo =new JSONArray(jsonTopic.getString("questions")).getJSONObject(0);
-
-
-                String desc = jsonQuestionsInfo.getString("text")); //Get the question text
-                question.setCorrectOption(Integer.parseInt(jsonQuestionsInfo.getString("answer")) - 1); //Parse the correct answer
+                JSONObject jsonQuestionsInfo = new JSONArray(jsonTopic.getString("questions")).getJSONObject(0);
+                //Get the question text
+                String desc = jsonQuestionsInfo.getString("text");
+                //Parse the correct answer
+                int answer = Integer.parseInt(jsonQuestionsInfo.getString("answer")) - ORDINAL_NUMBER_BIAS;
                 //Create the list of question options
                 JSONArray questionOptions = jsonQuestionsInfo.getJSONArray("answers");
-                ArrayList<String> optionsList = new ArrayList<>(5);
+                ArrayList<String> options = new ArrayList<>(5);
                 for (int i = 0; i < questionOptions.length(); i++) {
-                    optionsList.add(questionOptions.getString(i));
+                    options.add(questionOptions.getString(i));
                 }
-                Question question = new Question();
-                question.setOptions(optionsList); //Set the question options
+                Question question = new Question(desc, options, answer);
                 questions.add(question);
             } catch (JSONException e) {
                 Log.e(TAG, "Cannot get right Json data");
