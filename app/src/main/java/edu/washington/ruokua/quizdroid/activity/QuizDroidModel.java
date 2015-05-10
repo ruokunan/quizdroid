@@ -38,7 +38,7 @@ public class QuizDroidModel extends AppCompatActivity {
         //head to the overview of user select topic
 
         quizApp.setTopicIndex(topicPosition);
-        setContentView(R.layout.topic_overview);
+        setContentView(R.layout.activity_topic_model);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new TopicOverviewFragment())
                 .commit();

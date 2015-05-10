@@ -3,20 +3,21 @@ package edu.washington.ruokua.quizdroid.util;
 import java.io.Serializable;
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.R;
+
 /**
  * @author ruokunan
  *         <p/>
  *         A Topic contain a title of topic name, the
  *         short and long descripiton of the topic,  a
  *         collection of questions allow user to take quiz on
- *         and
+ *
+ *         The topic could have 0 questions
  *         <p/>
  *         Rep invariant:
  *         title != null && title.length() > 0 &&
  *         shortDesc != null  && shortz
- *         questionDesc != null && option != null && answers != null
- *         questionDesc.size() == option.size() && questionDescs.size == answer.size() &&
- *         questionDesc.size() == questionContain;
+ *
  *         questionNum >=0 && questionNum < questionContain
  *         curSelect >= 0 && answer >= 0 && curSelect < option.get(0).size &&
  *         answer < option.get(0).size
@@ -52,20 +53,72 @@ public class Topic implements Serializable {
     //the user's current score for this list of question
     private int score;
 
+    public int getIcon() {
+        return icon;
+    }
+
+    private int icon;
+
+
+    public static class Builder {
+        //Require title and short desc for each topic
+        private final String title;//required
+        private final String shortDesc;//required
+
+        //Optional Parameters
+        //initialized to default values
+        private String longDesc = null;//optional
+        //the questions contained in this topic
+        private List<Question> questions = null;//optional
+        private int icon = R.drawable.common_signin_btn_icon_dark;
+
+
+
+        public Builder(String title, String shortDesc) {
+            this.title = title;
+            this.shortDesc = shortDesc;
+        }
+
+        public Builder longDesc(String longDesc) {
+            this.longDesc = longDesc;
+            return this;
+        }
+
+        public Builder questions( List<Question> questions) {
+            if(questions == null) {
+                throw new IllegalArgumentException("questions list " +
+                        "for topic cannot be null");
+            }
+            this.questions = questions;
+            return this;
+
+        }
+
+        public Builder icon(int icon) {
+            this.icon = icon;
+            return this;
+
+        }
+
+        public Topic build() {
+            return new Topic(this);
+        }
+
+
+
+    }
 
     /**
-     * @param title     the title of topic
-     * @param shortDesc the short description of topic
-     * @param longDesc  the long description of topic
-     * @param questions the questions contains in this topic
+     *@param builder construct a new Topic with the given builder
      * @effects: Construct a new topic with given title, short description of
      * topic, long description of topic and
      */
-    public Topic(String title, String shortDesc, String longDesc, List<Question> questions) {
-        this.title = title;
-        this.shortDesc = shortDesc;
-        this.longDesc = longDesc;
-        this.questions = questions;
+    public Topic(Builder builder) {
+        this.title = builder.title;
+        this.shortDesc = builder.shortDesc;
+        this.longDesc = builder.longDesc;
+        this.questions = builder.questions;
+        this.icon = builder.icon;
 
         curQuestionNum = 0;
         score = 0;
@@ -160,7 +213,7 @@ public class Topic implements Serializable {
      * @return if the current question is the last question in this topic
      */
     public boolean hasNextQuestion() {
-        return curQuestionNum < getNumQuestionContain();
+        return curQuestionNum + ORDINAL_NUMBER_BIAS < getNumQuestionContain();
     }
 
     /**

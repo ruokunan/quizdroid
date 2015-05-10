@@ -3,13 +3,17 @@ package edu.washington.ruokua.quizdroid.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import edu.washington.ruokua.quizdroid.util.QuizApp;
+import java.util.List;
+
 import edu.washington.ruokua.quizdroid.R;
+import edu.washington.ruokua.quizdroid.util.QuizApp;
+import edu.washington.ruokua.quizdroid.util.Topic;
+import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
 
 /**
  * @author ruokunan
@@ -18,11 +22,6 @@ import edu.washington.ruokua.quizdroid.R;
  */
 public class TopicList extends AppCompatActivity {
 
-
-
-
-    //The view of topic
-    private ListView topicList;
 
     /**
      * {@inheritDoc}
@@ -34,15 +33,19 @@ public class TopicList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.topic_list);
+        setContentView(R.layout.activity_topic_list);
 
 
         QuizApp quizApp = (QuizApp)getApplication();
-        topicList = (ListView) findViewById(R.id.lstTopic);
+        ListView topicList = (ListView) findViewById(R.id.topic_list);
 
-
-        ArrayAdapter<String> items = new ArrayAdapter<String>(this,
-                R.layout.topic_list_item, quizApp.getRepository().getTopicList());
+        List<Topic> topics = quizApp.getTopicList();
+        if(topics == null) {
+            throw new RuntimeException("There is not any topic exist in the repository");
+        }
+        Log.i("fuck you ass", topics.get(1).getTitle());
+        TopicListAdapter items = new TopicListAdapter(this,
+                R.layout.topic_list_item, topics);
         topicList.setAdapter(items);
 
         //when user click the topic on the list, head to the overview of the topic

@@ -49,15 +49,15 @@ public class Question {
     }
 
     /**
-     * @param questions question description
+     * @param desc question description
      * @param options   options allow user take choices
      * @param answer    index of correct answer
      * @effects make a new quiz with given question description
      * options, and answer
      */
-    public Question(String questions, List<String> options, int answer) {
+    public Question(String desc, List<String> options, int answer) {
         //initialize the quiz
-        this.description = questions;
+        this.description = desc;
         this.options = options;
         this.answer = answer;
         if (CHECK_REP) {

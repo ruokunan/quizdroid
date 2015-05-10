@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
 /**
@@ -40,10 +41,13 @@ public class TopicOverviewFragment extends Fragment {
 
         QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
         QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
-        Topic currentTopic =  quizApp.getRepository().getCurrentTopic(quizApp.getTopicIndex());
+        Topic currentTopic =  quizApp.getCurrentTopic();
 
+        //Display topic icon
+        ImageView topicIcon = (ImageView) view.findViewById(R.id.topic_icon);
+        topicIcon.setImageResource(quizApp.getCurrentTopic().getIcon());
 
-        //Display the quiz topic
+        //Display topic
         String topic = currentTopic.getTitle();
         TextView quizTopic = (TextView) view.findViewById(R.id.quizTopic);
         quizTopic.setText(topic);
