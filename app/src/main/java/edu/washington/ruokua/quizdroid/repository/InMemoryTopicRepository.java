@@ -101,20 +101,13 @@ public class InMemoryTopicRepository implements TopicRepository {
         return serverTopics;
     }
 
-    private Topic createTopics( int topicIndex) {
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                String title = serverTopics.get(topicIndex).getTitle();
-                String shortDesc = serverTopics.get(topicIndex).getShortDesc();
+    private Topic createTopics(int topicIndex) {
+        String title = serverTopics.get(topicIndex).getTitle();
+        String shortDesc = serverTopics.get(topicIndex).getShortDesc();
+        return new Topic.Builder(title, shortDesc)
+                .questions(questionList.getCurrentQuestions(topicIndex))
+                .build();
 
-
-                return new Topic.Builder(title,shortDesc).
-            } catch (JSONException e) {
-                Log.e(TAG, "NO JSON DATA RECEIVED, USE LOCAL DATA INSTEAD");
-            }
-
-        }
-        throw new RuntimeException();
     }
 
 
@@ -313,7 +306,7 @@ public class InMemoryTopicRepository implements TopicRepository {
             try {
                 //Grab the only object within the questions object
                 JSONObject jsonTopic = jsonArray.getJSONObject(topicIndex);
-                JSONObject jsonQuestionsInfo =new JSONArray(jsonTopic.getString("questions")).getJSONObject(0);
+                JSONObject jsonQuestionsInfo = new JSONArray(jsonTopic.getString("questions")).getJSONObject(0);
                 //Get the question text
                 String desc = jsonQuestionsInfo.getString("text");
                 //Parse the correct answer
@@ -324,7 +317,7 @@ public class InMemoryTopicRepository implements TopicRepository {
                 for (int i = 0; i < questionOptions.length(); i++) {
                     options.add(questionOptions.getString(i));
                 }
-                Question question = new Question(desc,options,answer);
+                Question question = new Question(desc, options, answer);
                 questions.add(question);
             } catch (JSONException e) {
                 Log.e(TAG, "Cannot get right Json data");
