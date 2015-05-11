@@ -151,6 +151,9 @@ public class Topic implements Serializable {
      * @return number of question in the topic
      */
     public int getNumQuestionContain() {
+        if(questions == null) {
+            return -1;
+        }
         return questions.size();
     }
 
@@ -197,7 +200,11 @@ public class Topic implements Serializable {
         return curQuestionNum + ORDINAL_NUMBER_BIAS;
     }
 
-
+    public void  reset() {
+        this.curQuestionNum = 0;
+        this.curSelect = -1;
+        this.score = 0;
+    }
     /**
      * @effects: set the current question to next question
      * set the user select answer to initial state

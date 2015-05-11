@@ -1,6 +1,7 @@
 package edu.washington.ruokua.quizdroid.util;
 
 import android.app.Application;
+import android.os.StrictMode;
 import android.util.Log;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class QuizApp  extends Application {
 
     private TopicRepository repository;
 
+    private final static String URL = "http://tednewardsandbox.site44.com/questions.json";
 
 
     /**
@@ -29,6 +31,8 @@ public class QuizApp  extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
         Log.i(TAG, "The QuizApp successfully constructed");
     }
 

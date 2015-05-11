@@ -102,7 +102,7 @@ public class AnswerFragment extends Fragment {
                             .commit();
 
                 } else {
-
+                    currentTopic.reset();
                     Intent backToFront = new Intent(getActivity(), TopicList.class);
                     startActivity(backToFront);
                 }
