@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ruokua on 5/10/15.
  */
-public class QuestionJsonParser {
+public class SampleQuestion {
     private String desc;
     private List<String> options;
     private int answer;
@@ -45,7 +45,7 @@ public class QuestionJsonParser {
 
     @Override
     public String toString() {
-        return "QuestionJsonParser{" +
+        return "SampleQuestion{" +
                 "desc='" + desc + '\'' +
                 ", options=" + options +
                 ", answer=" + answer +

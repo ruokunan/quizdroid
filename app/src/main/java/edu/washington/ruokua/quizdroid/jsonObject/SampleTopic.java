@@ -7,13 +7,13 @@ import java.util.List;
 /**
  * Created by ruokua on 5/10/15.
  */
-public class TopicJsonParser {
+public class SampleTopic {
     @JsonProperty("title")
     private String title;
     @JsonProperty("desc")
     private String desc;
     @JsonProperty("questions")
-    private List<QuestionJsonParser> questions;
+    private List<SampleQuestion> questions;
 
     @JsonProperty("title")
     public String getTitle() {
@@ -26,7 +26,7 @@ public class TopicJsonParser {
     }
 
     @JsonProperty("questions")
-    public List<QuestionJsonParser> getQuestions() {
+    public List<SampleQuestion> getQuestions() {
         return questions;
     }
 
@@ -41,13 +41,13 @@ public class TopicJsonParser {
     }
 
     @JsonProperty("questions")
-    public void setQuestions(List<QuestionJsonParser> questions) {
+    public void setQuestions(List<SampleQuestion> questions) {
         this.questions = questions;
     }
 
     @Override
     public String toString() {
-        return "TopicJsonParser{" +
+        return "SampleTopic{" +
                 "title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
                 ", questions=" + questions +

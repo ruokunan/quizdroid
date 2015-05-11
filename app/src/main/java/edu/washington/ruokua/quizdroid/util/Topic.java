@@ -200,7 +200,11 @@ public class Topic implements Serializable {
         return curQuestionNum + ORDINAL_NUMBER_BIAS;
     }
 
-
+    public void  reset() {
+        this.curQuestionNum = 0;
+        this.curSelect = -1;
+        this.score = 0;
+    }
     /**
      * @effects: set the current question to next question
      * set the user select answer to initial state
