@@ -3,8 +3,15 @@ package edu.washington.ruokua.quizdroid.util;
 import android.app.Application;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.jsonObject.TopicJsonMapper;
 import edu.washington.ruokua.quizdroid.repository.InMemoryTopicRepository;
 import edu.washington.ruokua.quizdroid.repository.TopicRepository;
 
@@ -20,6 +27,8 @@ public class QuizApp  extends Application {
 
     private TopicRepository repository;
 
+    private final static String JSON_FILE_PATH = "/Users/ruokua/quizdroid/" +
+            "app/src/main/java/edu/washington/ruokua/quizdroid/repository" +"questoins.json";
 
 
     /**
@@ -29,6 +38,46 @@ public class QuizApp  extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        try {
+            File jsonInput = new File(JSON_FILE_PATH);
+            // read from file, convert it to user class
+            TopicJsonMapper[] jsonMappers = mapper.readValue(jsonInput, TopicJsonMapper[].class);
+            // display to console
+            // System.out.println(user);
+            Log.i("This is it" ,jsonMappers[0].toString());
+        } catch (JsonGenerationException e) {
+
+            e.printStackTrace();
+
+        } catch (JsonMappingException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         Log.i(TAG, "The QuizApp successfully constructed");
     }
 

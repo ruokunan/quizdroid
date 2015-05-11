@@ -151,6 +151,9 @@ public class Topic implements Serializable {
      * @return number of question in the topic
      */
     public int getNumQuestionContain() {
+        if(questions == null) {
+            return -1;
+        }
         return questions.size();
     }
 

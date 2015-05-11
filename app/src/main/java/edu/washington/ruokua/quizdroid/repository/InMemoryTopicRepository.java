@@ -1,15 +1,10 @@
 package edu.washington.ruokua.quizdroid.repository;
 
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.util.JsonReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +15,10 @@ import edu.washington.ruokua.quizdroid.util.Topic;
 import static java.util.Arrays.asList;
 
 /**
- * Created by ruokua on 5/8/15.
- * {@inheritDoc}
- * This Topic Repository stay in the memory
- */
+* Created by ruokua on 5/8/15.
+* {@inheritDoc}
+* This Topic Repository stay in the memory
+*/
 public class InMemoryTopicRepository implements TopicRepository {
     //title of the topic
     private final String MATH_TITLE = "Math";
@@ -53,9 +48,11 @@ public class InMemoryTopicRepository implements TopicRepository {
     private Topic marvelTopic;
     private QuestionList questionList;
 
+    private final static String JSON_FILE_PATH = "/Users/ruokua/quizdroid/" +
+            "app/src/main/java/edu/washington/ruokua/quizdroid/repository" +"questoins.json";
 
     private List<Topic> serverTopics;
-    private JSONArray jsonArray;
+    JsonReader jsonReader;
 
     private final int ORDINAL_NUMBER_BIAS = 1;
 
@@ -75,46 +72,63 @@ public class InMemoryTopicRepository implements TopicRepository {
     /**
      * @effects: initialize an InMemoryTopicRepository with a question list
      */
-    public InMemoryTopicRepository() {
+    public InMemoryTopicRepository(){
         createTopics();
+
+
+
 
         questionList = new QuestionList();
 
     }
 
+//    /**
+//     * {@inheritDoc}
+//     */
+//    @Override
+//    public List<Topic> getTopicList() {
+//        return serverTopics;
+//    }
+
+//
+//    @Override
+//    public Topic getCurrentTopic(int topicIndex) {
+//        if(serverTopics.get(topicIndex).getQuestionNum() == -1) {
+//            serverTopics.set(topicIndex, createTopics(topicIndex));
+//        }
+//        return  serverTopics.get(topicIndex);
+//    }
 
     private List<Topic> createTopics() {
 
-        serverTopics = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject jsonTopic = jsonArray.getJSONObject(i);
-                serverTopics.add(new Topic.Builder(jsonTopic.getString("title"),
-                        jsonTopic.getString("desc")).build());
-            } catch (JSONException e) {
-                Log.e(TAG, "Cannot get right Json data");
-                //change to later
-                throw new RuntimeException("Cannot get data from server");
-            }
-
-        }
+//        serverTopics = new ArrayList<>();
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            try {
+//                JSONObject jsonTopic = jsonArray.getJSONObject(i);
+//                serverTopics.add(new Topic.Builder(jsonTopic.getString("title"),
+//                        jsonTopic.getString("desc")).build());
+//            } catch (JSONException e) {
+//                Log.e(TAG, "Cannot get right Json data");
+//                //change to later
+//                throw new RuntimeException("Cannot get data from server");
+//            }
+//
+//        }
         return serverTopics;
     }
+//
+//    private Topic createTopics(int topicIndex) {
+//        String title = serverTopics.get(topicIndex).getTitle();
+//        String shortDesc = serverTopics.get(topicIndex).getShortDesc();
+//        return new Topic.Builder(title, shortDesc)
+//                .questions(questionList.getCurrentQuestions(topicIndex))
+//                .build();
+//
+//    }
 
-    private Topic createTopics(int topicIndex) {
-        String title = serverTopics.get(topicIndex).getTitle();
-        String shortDesc = serverTopics.get(topicIndex).getShortDesc();
-        return new Topic.Builder(title, shortDesc)
-                .questions(questionList.getCurrentQuestions(topicIndex))
-                .build();
-
-    }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+
     public Topic getCurrentTopic(int topicIndex) {
 
         switch (topicIndex) {
@@ -140,12 +154,12 @@ public class InMemoryTopicRepository implements TopicRepository {
         }
     }
 
+
     /**
-     * {@inheritDoc}
-     */
-    @Override
+    * {@inheritDoc}
+    */
     public List<Topic> getTopicList() {
-        return serverTopics;
+        return inMemoryTopics;
     }
 
     //initialize math topic
@@ -189,13 +203,13 @@ public class InMemoryTopicRepository implements TopicRepository {
         }
 
 
-        public List<Question> getCurrentQuestions(int topicIndex) {
-            if (!jsonQuestions.containsKey(topicIndex)) {
-                jsonQuestions.put(topicIndex, createQuestions(topicIndex));
-            }
-            return jsonQuestions.get(topicIndex);
-
-        }
+//        public List<Question> getCurrentQuestions(int topicIndex) {
+//            if (!jsonQuestions.containsKey(topicIndex)) {
+//                jsonQuestions.put(topicIndex, createQuestions(topicIndex));
+//            }
+//            return jsonQuestions.get(topicIndex);
+//
+//        }
 
         /**
          * @return the list of Question for user select topic
@@ -300,29 +314,31 @@ public class InMemoryTopicRepository implements TopicRepository {
 
         }
 
-        private List<Question> createQuestions(int topicIndex) {
-            List<Question> questions = new ArrayList<>();
-            assert (jsonArray != null);
-            try {
-                //Grab the only object within the questions object
-                JSONObject jsonTopic = jsonArray.getJSONObject(topicIndex);
-                JSONObject jsonQuestionsInfo = new JSONArray(jsonTopic.getString("questions")).getJSONObject(0);
-                //Get the question text
-                String desc = jsonQuestionsInfo.getString("text");
-                //Parse the correct answer
-                int answer = Integer.parseInt(jsonQuestionsInfo.getString("answer")) - ORDINAL_NUMBER_BIAS;
-                //Create the list of question options
-                JSONArray questionOptions = jsonQuestionsInfo.getJSONArray("answers");
-                ArrayList<String> options = new ArrayList<>(5);
-                for (int i = 0; i < questionOptions.length(); i++) {
-                    options.add(questionOptions.getString(i));
-                }
-                Question question = new Question(desc, options, answer);
-                questions.add(question);
-            } catch (JSONException e) {
-                Log.e(TAG, "Cannot get right Json data");
-            }
-            return questions;
-        }
+//        private List<Question> createQuestions(int topicIndex) {
+//            List<Question> questions = new ArrayList<>();
+//            assert (jsonArray != null);
+//            try {
+//                //Grab the only object within the questions object
+//                JSONObject jsonTopic = jsonArray.getJSONObject(topicIndex);
+//
+//                JSONObject jsonQuestionsInfo = new JSONArray(jsonTopic.getString("questions"))
+//                        .getJSONObject(0);
+//                //Get the question text
+//                String desc = jsonQuestionsInfo.getString("text");
+//                //Parse the correct answer
+//                int answer = Integer.parseInt(jsonQuestionsInfo.getString("answer")) - ORDINAL_NUMBER_BIAS;
+//                //Create the list of question options
+//                JSONArray questionOptions = jsonQuestionsInfo.getJSONArray("answers");
+//                ArrayList<String> options = new ArrayList<>();
+//                for (int i = 0; i < questionOptions.length(); i++) {
+//                    options.add(questionOptions.getString(i));
+//                }
+//                Question question = new Question(desc, options, answer);
+//                questions.add(question);
+//            } catch (JSONException e) {
+//                Log.e(TAG, "Cannot get right Json data");
+//            }
+//            return questions;
+//        }
     }
 }
