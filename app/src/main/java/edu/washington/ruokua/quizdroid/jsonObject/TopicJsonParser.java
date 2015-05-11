@@ -8,8 +8,11 @@ import java.util.List;
  * Created by ruokua on 5/10/15.
  */
 public class TopicJsonParser {
+    @JsonProperty("title")
     private String title;
+    @JsonProperty("desc")
     private String desc;
+    @JsonProperty("questions")
     private List<QuestionJsonParser> questions;
 
     @JsonProperty("title")

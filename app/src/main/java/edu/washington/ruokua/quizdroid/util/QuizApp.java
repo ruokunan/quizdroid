@@ -1,17 +1,24 @@
 package edu.washington.ruokua.quizdroid.util;
 
 import android.app.Application;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.IOException;
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.jsonObject.TopicJsonMapper;
+import edu.washington.ruokua.quizdroid.jsonObject.TopicJsonParser;
 import edu.washington.ruokua.quizdroid.repository.InMemoryTopicRepository;
 import edu.washington.ruokua.quizdroid.repository.TopicRepository;
 
@@ -27,8 +34,7 @@ public class QuizApp  extends Application {
 
     private TopicRepository repository;
 
-    private final static String JSON_FILE_PATH = "/Users/ruokua/quizdroid/" +
-            "app/src/main/java/edu/washington/ruokua/quizdroid/repository" +"questoins.json";
+    private final static String URL = "http://tednewardsandbox.site44.com/questions.json";
 
 
     /**
@@ -39,19 +45,33 @@ public class QuizApp  extends Application {
     public void onCreate() {
         super.onCreate();
 
-        ObjectMapper mapper = new ObjectMapper();
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         try {
-            File jsonInput = new File(JSON_FILE_PATH);
+            HttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet("http://tednewardsandbox.site44.com/questions.json");
+            HttpResponse response = client.execute(httpGet);
+
+            ObjectMapper mapper = new ObjectMapper();
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            if(statusCode != 200) {
+                throw  new RuntimeException("Net work Probelm");
+            }
+            HttpEntity entity = response.getEntity();
+
+
+
             // read from file, convert it to user class
-            TopicJsonMapper[] jsonMappers = mapper.readValue(jsonInput, TopicJsonMapper[].class);
+            TopicJsonParser[] jsonMappers = mapper.readValue(entity.getContent(), TopicJsonParser[].class);
             // display to console
             // System.out.println(user);
             Log.i("This is it" ,jsonMappers[0].toString());
         } catch (JsonGenerationException e) {
 
             e.printStackTrace();
+            Log.e("Fuck you" , "File Not Found");
 
         } catch (JsonMappingException e) {
 
@@ -62,8 +82,6 @@ public class QuizApp  extends Application {
             e.printStackTrace();
 
         }
-
-
 
 
 
