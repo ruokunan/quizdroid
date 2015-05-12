@@ -11,8 +11,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.jsonObject.SampleQuestion;
-import edu.washington.ruokua.quizdroid.jsonObject.SampleTopic;
+import edu.washington.ruokua.quizdroid.jsonObject.QuestionTemplate;
+import edu.washington.ruokua.quizdroid.jsonObject.TopicTemplate;
 import edu.washington.ruokua.quizdroid.util.Question;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
@@ -20,34 +20,47 @@ import edu.washington.ruokua.quizdroid.util.Topic;
  * Created by ruokua on 5/11/15.
  */
 public class JsonTopicRepository implements TopicRepository {
-
+    //The list of topic allow user to take quiz on
     private List<Topic> serverTopics;
-
+    //The bias use to correct the index of answer when parse each answer
     private final int ORDINAL_NUMBER_BIAS = 1;
-    private boolean buildSucceed = true;
-    private List<SampleTopic> jsonMappers;
+    //Indicate if this Repository read in data successfully
+    private boolean buildSucceed;
+    // Hold a list of TopicTemplate from parsed data
+    private List<TopicTemplate> jsonMappers;
 
     private String TAG = JsonTopicRepository.class.getName();
 
+    private String FILE_NAME= "questions.json";
+
+    /**
+     *
+     * @param context the context of this topic repository
+     *
+     * @effects: initialize an JonTopic Repository and by read given file
+     * @effects: fill servertopics with  topic with only title and short description
+     */
 
     public JsonTopicRepository(Context context) {
 
-
         serverTopics = new ArrayList<>();
         try {
-            InputStream inputStream = context.getAssets().open("questions.json");
-
-
+            //Read in Json File
+            InputStream inputStream = context.getAssets().open(FILE_NAME);
             ObjectMapper mapper = new ObjectMapper();
 
             jsonMappers = mapper.readValue(inputStream,
-                    new TypeReference<List<SampleTopic>>() {
+                    new TypeReference<List<TopicTemplate>>() {
                     });
+
             Log.d(TAG, jsonMappers.get(0).toString());
 
-            for (SampleTopic sampleTopic : jsonMappers) {
-                serverTopics.add(new Topic.Builder(sampleTopic.getTitle(),
-                        sampleTopic.getDesc()).build());
+
+            buildSucceed  = true;
+
+            //Build topic from parsed data
+            for (int i = 0; i < jsonMappers.size();i++) {
+                serverTopics.add(createTopics(i));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,53 +72,70 @@ public class JsonTopicRepository implements TopicRepository {
 
     }
 
+
     /**
+     *
+     * @return if the JsonTopicRepository successfully
+     * Read in Json File
+     */
+    public boolean isBuildSucceed() {
+        return buildSucceed;
+    }
+
+
+    /**
+     *
      * {@inheritDoc}
      */
     @Override
     public List<Topic> getTopicList() {
         if (serverTopics == null) {
-            serverTopics = new ArrayList<>();
+            return new ArrayList<>();
         }
         return serverTopics;
     }
 
+    /**
+     * {@inheritDoc}
 
+     */
     @Override
     public Topic getCurrentTopic(int topicIndex) {
-        if (serverTopics.get(topicIndex).getNumQuestionContain() == -1) {
-            serverTopics.set(topicIndex, createTopics(topicIndex));
-        }
         return serverTopics.get(topicIndex);
     }
 
-
+    /**
+     * @param topicIndex the index of given topic
+     * @return fully initialize the given topic with given data
+     */
     private Topic createTopics(int topicIndex) {
-        SampleTopic sampleTopic = jsonMappers.get(topicIndex);
+        TopicTemplate topicTemplate = jsonMappers.get(topicIndex);
 
-        return new Topic.Builder(sampleTopic.getTitle(), sampleTopic.getDesc())
+        return new Topic.Builder(topicTemplate.getTitle(), topicTemplate.getDesc())
                 .questions(new ArrayList<>(createQuestions(topicIndex)))
                 .build();
 
     }
 
+    /**
+     *
+     * @param topicIndex the index of given topic
+     * @return construct a list of question for given topic from
+     * the parsed Json Data
+     */
     private List<Question> createQuestions(int topicIndex) {
         List<Question> questions = new ArrayList<>();
-        List<SampleQuestion> sampleQuestions = jsonMappers.get(topicIndex).getQuestions();
-        assert (sampleQuestions != null);
-        for (SampleQuestion sampleQuestion : sampleQuestions) {
-            assert (sampleQuestion != null);
-            questions.add(new Question(sampleQuestion.getDescription(),
-                    sampleQuestion.getOptions(),
-                    sampleQuestion.getAnswer() - ORDINAL_NUMBER_BIAS));
+        List<QuestionTemplate> questionTemplates = jsonMappers.get(topicIndex).getQuestions();
+        assert (questionTemplates != null);
+        for (QuestionTemplate questionTemplate : questionTemplates) {
+            assert (questionTemplate != null);
+            questions.add(new Question(questionTemplate.getDescription(),
+                    questionTemplate.getOptions(),
+                    questionTemplate.getAnswer() - ORDINAL_NUMBER_BIAS));
         }
         Log.e(TAG, questions.toString());
         assert (questions != null);
         return questions;
     }
 
-
-    public boolean isBuildSucceed() {
-        return buildSucceed;
-    }
 }

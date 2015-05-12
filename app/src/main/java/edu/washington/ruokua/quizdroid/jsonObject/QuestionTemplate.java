@@ -6,8 +6,9 @@ import java.util.List;
 
 /**
  * Created by ruokua on 5/10/15.
+ * The template for  parser item contains in questions entry in Json Data
  */
-public class SampleQuestion {
+public class QuestionTemplate {
     private String desc;
     private List<String> options;
     private int answer;

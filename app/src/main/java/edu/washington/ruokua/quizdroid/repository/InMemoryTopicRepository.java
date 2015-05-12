@@ -20,9 +20,13 @@ public class InMemoryTopicRepository implements TopicRepository {
     private final String MATH_TITLE = "Math";
     private final String PHYSICS_TITLE = "Physics";
     private final String MARVEL_TITLE = "Marvel";
+
+
+    //short  description of the topic
     private final String MATH_SHORT_DESC = "Short Description for Math ";
     private final String PHYSICS_SHORT_DESC = "Short Description for PHYSICS";
     private final String MARVEL_SHORT_DESC = "Short Description for MARVEL";
+
     //long description of the topic
     private final String MATH_LONG_DESC = "The abstract science of number, quantity, " +
             "and space. Mathematics may be studied in its own right ( pure Mathematics )," +
@@ -33,22 +37,19 @@ public class InMemoryTopicRepository implements TopicRepository {
             "that of chemistry and biology, includes mechanics, heat, light and other radiation, " +
             "sound, electricity, magnetism, and the structure of atoms.";
 
-    //short  description of the topic
     private final String MARVEL_LONG_DESC = "The Marvel Super Heroes is an American / Canadian " +
             "animated television series starring five comic-book superheroes from Marvel Comics." +
             " The first TV series based on Marvel characters," +
             " it debuted in syndication on U.S. television in 1966. ";
+
+    //topic object for each topic
     private Topic mathTopic;
     private Topic physicsTopic;
     private Topic marvelTopic;
+
+    //the questionsList manage the list of question contained in each topic
     private QuestionList questionList;
 
-    private final static String JSON_FILE_PATH = "/Users/ruokua/quizdroid/" +
-            "app/src/main/java/edu/washington/ruokua/quizdroid/repository" + "questoins.json";
-
-
-
-    private String TAG = InMemoryTopicRepository.class.getName();
 
 
     // A list of different topics on which allow user to take quiz
@@ -64,7 +65,8 @@ public class InMemoryTopicRepository implements TopicRepository {
 
 
     /**
-     * @effects: initialize an InMemoryTopicRepository with a question list
+     * @effects: initialize an InMemoryTopicRepository with
+     * an empty question list
      */
     public InMemoryTopicRepository() {
 
@@ -74,6 +76,21 @@ public class InMemoryTopicRepository implements TopicRepository {
 
 
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Topic> getTopicList() {
+        return inMemoryTopics;
+    }
+
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Topic getCurrentTopic(int topicIndex) {
 
         switch (topicIndex) {
@@ -100,12 +117,6 @@ public class InMemoryTopicRepository implements TopicRepository {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<Topic> getTopicList() {
-        return inMemoryTopics;
-    }
 
     //initialize math topic
     private void setMathTopic() {
@@ -177,15 +188,18 @@ public class InMemoryTopicRepository implements TopicRepository {
          */
         private void setMathQuestions() {
             mathQuestions = new ArrayList<>();
+            //Question Description
             List<String> desc = new ArrayList<>(Arrays.asList(
                     "1 + 1 = ?",
                     "2 * 3 = ?",
                     "10 % 10 = ?"));
+            //Question options List
             List<List<String>> options = asList(
                     asList("1", "2", "3", "4"),
                     asList("3", "4", "5", "6"),
                     asList("0", "1", "2", "3")
             );
+            //Question Answer List
             List<Integer> answers = new ArrayList<>(Arrays.asList(
                     1,
                     3,
@@ -202,15 +216,18 @@ public class InMemoryTopicRepository implements TopicRepository {
          */
         private void setPhysicsQuestions() {
             physicsQuestions = new ArrayList<>();
+            //Question Description
             List<String> desc = new ArrayList<>(Arrays.asList(
                     "Acceleration of an object due to gravity?",
                     "Acceleration of an object due to gravity in the moon?",
                     "Acceleration of an object due to gravity in the bible?"));
+            //Question options List
             List<List<String>> options = asList(
                     asList("9.8 m/s/s", "10 mi/s", "1 in/s", "Magic"),
                     asList("9.8 m/s/s", "1.622 m/s/s10 mi/s", "1 in/s", "I do not know"),
                     asList("guess", "make a guess", "there is no god", "goD bless me")
             );
+            //Question Answer List
             List<Integer> answers = new ArrayList<>(Arrays.asList(
                     0,
                     1,

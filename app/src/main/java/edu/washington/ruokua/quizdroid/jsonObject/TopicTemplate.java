@@ -6,14 +6,15 @@ import java.util.List;
 
 /**
  * Created by ruokua on 5/10/15.
+ * The template for parser Questions Json Data
  */
-public class SampleTopic {
+public class TopicTemplate {
     @JsonProperty("title")
     private String title;
     @JsonProperty("desc")
     private String desc;
     @JsonProperty("questions")
-    private List<SampleQuestion> questions;
+    private List<QuestionTemplate> questions;
 
     @JsonProperty("title")
     public String getTitle() {
@@ -26,7 +27,7 @@ public class SampleTopic {
     }
 
     @JsonProperty("questions")
-    public List<SampleQuestion> getQuestions() {
+    public List<QuestionTemplate> getQuestions() {
         return questions;
     }
 
@@ -41,7 +42,7 @@ public class SampleTopic {
     }
 
     @JsonProperty("questions")
-    public void setQuestions(List<SampleQuestion> questions) {
+    public void setQuestions(List<QuestionTemplate> questions) {
         this.questions = questions;
     }
 
