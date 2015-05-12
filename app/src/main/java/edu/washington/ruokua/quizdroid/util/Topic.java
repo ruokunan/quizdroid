@@ -11,25 +11,31 @@ import edu.washington.ruokua.quizdroid.R;
  *         A Topic contain a title of topic name, the
  *         short and long descripiton of the topic,  a
  *         collection of questions allow user to take quiz on
- *
+ *         <p/>
  *         The topic could have 0 questions
  *         <p/>
  *         Rep invariant:
  *         title != null && title.length() > 0 &&
- *         shortDesc != null  && shortz
- *
- *         questionNum >=0 && questionNum < questionContain
- *         curSelect >= 0 && answer >= 0 && curSelect < option.get(0).size &&
+ *         shortDesc != null  && shortDes.length() > 0
+ *         <p/>
+ *         if questions != null
+ *         questions.size() >=0 &&  questions.size() < questionContain
+ *         curSelect >= -1 && answer >= 0 && curSelect < option.get(0).size &&
  *         answer < option.get(0).size
  *         score >= 0 && score <= questionNum
  *         <p/>
+ *         <p/>
  *         Abstraction function:
- *         The number of question = questionContain
+ *         The number of question in this topic = questions.size()
  *         The score for user so far = score
- *         The current displayed question description show to use
- *         = questionDesc[curQuestionNum]
- *         The current displayed question choice show to user = option[curQuestionNum]
- *         The right choice for current displayed answer = answe[curQuestionNum]
+ *         The current displayed question description
+ *         show to user in the list  = shortDesc
+ *         The current displayed question description
+ *         show to user in overview page  = longDesc
+ *         The current displayed question choice show to user
+ *         =  questions[cureQuestionNum].options
+ *         The right choice for current displayed answer
+ *         = questions[cureQuestionNum].answer
  *         The user choice for the answer  = curSelect
  */
 
@@ -52,11 +58,7 @@ public class Topic implements Serializable {
     private int curSelect;
     //the user's current score for this list of question
     private int score;
-
-    public int getIcon() {
-        return icon;
-    }
-
+    //the icon for this topic
     private int icon;
 
 
@@ -65,13 +67,14 @@ public class Topic implements Serializable {
         private final String title;//required
         private final String shortDesc;//required
 
-        //Optional Parameters
         //initialized to default values
         private String longDesc = "This topic lack of long description";//optional
-        //the questions contained in this topic
-        private List<Question> questions = null;//optional
-        private int icon = R.drawable.common_signin_btn_icon_dark;
 
+        //Optional Parameters
+        //the questions contained in this topic
+        private List<Question> questions = null;
+        //the icon for this topic
+        private int icon = R.drawable.common_signin_btn_icon_dark;
 
 
         public Builder(String title, String shortDesc) {
@@ -84,8 +87,8 @@ public class Topic implements Serializable {
             return this;
         }
 
-        public Builder questions( List<Question> questions) {
-            if(questions == null) {
+        public Builder questions(List<Question> questions) {
+            if (questions == null) {
                 throw new IllegalArgumentException("questions list " +
                         "for topic cannot be null");
             }
@@ -105,11 +108,10 @@ public class Topic implements Serializable {
         }
 
 
-
     }
 
     /**
-     *@param builder construct a new Topic with the given builder
+     * @param builder construct a new Topic with the given builder
      * @effects: Construct a new topic with given title, short description of
      * topic, long description of topic and
      */
@@ -123,6 +125,13 @@ public class Topic implements Serializable {
         curQuestionNum = 0;
         score = 0;
         curSelect = -1;
+    }
+
+    /**
+     * @return icon of the topic
+     */
+    public int getIcon() {
+        return icon;
     }
 
     /**
@@ -151,7 +160,7 @@ public class Topic implements Serializable {
      * @return number of question in the topic
      */
     public int getNumQuestionContain() {
-        if(questions == null) {
+        if (questions == null) {
             return -1;
         }
         return questions.size();
@@ -169,7 +178,6 @@ public class Topic implements Serializable {
     }
 
     /**
-     *
      * @param curSelect user current select answer
      * @effects: set the user select answer for current problem in this topic
      */
@@ -200,11 +208,15 @@ public class Topic implements Serializable {
         return curQuestionNum + ORDINAL_NUMBER_BIAS;
     }
 
-    public void  reset() {
+    /**
+     * reset the state of topic
+     */
+    public void reset() {
         this.curQuestionNum = 0;
         this.curSelect = -1;
         this.score = 0;
     }
+
     /**
      * @effects: set the current question to next question
      * set the user select answer to initial state
@@ -228,6 +240,16 @@ public class Topic implements Serializable {
      */
     public Question getCurrentQuestion() {
         return questions.get(curQuestionNum);
+    }
+
+    /**
+     * Check the rep invariant.
+     *
+     * @effects: nothing if this satisfies rep invariant;
+     * otherwise throws an exception
+     */
+    private void checkRep() {
+
     }
 }
 
