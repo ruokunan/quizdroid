@@ -65,7 +65,7 @@ public class QuizDroidModel extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-            Log.i("IS THIS RUN", "RUNRUNRUNERU");
+
             Intent PreferenceActivity = new Intent(this, SettingsActivity.class);
             startActivityForResult(PreferenceActivity, RESULT);
             assert (RESULT != -1);

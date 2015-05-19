@@ -19,12 +19,13 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "Alarm Received");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         String url = sharedPreferences.getString("download_url", null);
         assert(url != null);
-        String toastMessage = "Download for the url {" + url + "}";
+        String toastMessage = "Download from the url {" + url + "}";
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
 
-        Intent  download = new Intent(context, DownloadService.class);
+        Intent download = new Intent(context, DownloadService.class);
         context.startService(download);
     }
 

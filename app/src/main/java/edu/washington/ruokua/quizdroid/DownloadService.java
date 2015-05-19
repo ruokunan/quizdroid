@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -24,7 +25,6 @@ public class DownloadService extends IntentService {
 
     @Override
     public void onCreate() {
-        Log.i(TAG, "This got create");
         super.onCreate();
     }
 
@@ -41,8 +41,10 @@ public class DownloadService extends IntentService {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String url = sharedPreferences.getString("download_url", "");
-        Log.i(TAG, "should be downloading here");
 
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        downloadID = downloadManager.enqueue(request);
 
     }
 
@@ -58,7 +60,8 @@ public class DownloadService extends IntentService {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String refreshIntervalString = sharedPreferences.getString("download_interval", "5");
 
-            int refreshInterval =Integer.parseInt(refreshIntervalString) * 6000; // 5 min x 60,000 milliseconds = total ms in 5 min
+            //TODO: use time unit
+            int refreshInterval =Integer.parseInt(refreshIntervalString) * 60000;
 
             Log.i(TAG, "setting alarm to " + refreshInterval);
 

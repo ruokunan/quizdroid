@@ -1,7 +1,6 @@
 package edu.washington.ruokua.quizdroid.activity;
 
 import android.app.DownloadManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,9 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.R;
-import edu.washington.ruokua.quizdroid.AlarmReceiver;
 import edu.washington.ruokua.quizdroid.DownloadService;
+import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.util.Topic;
 import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
@@ -64,7 +62,6 @@ public class TopicList extends AppCompatActivity {
         if (topics == null) {
             throw new RuntimeException("There is not any topic exist in the repository");
         }
-        Log.i("fuck you ass", topics.get(1).getTitle());
         TopicListAdapter items = new TopicListAdapter(this,
                 R.layout.topic_list_item, topics);
         topicList.setAdapter(items);
@@ -81,23 +78,12 @@ public class TopicList extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        // Check if alarm has already been created
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-
-        if (PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null) {
-            DownloadService.startOrStopAlarm(this, false);
-        }
-
+        DownloadService.startOrStopAlarm(this, false);
         Log.i(TAG, "turn off receiver");
         unregisterReceiver(receiver);
     }
@@ -176,12 +162,12 @@ public class TopicList extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
-
-
-            DownloadService.startOrStopAlarm(TopicList.this, true);
+        if (requestCode == RESULT) {
+            Log.i("IS THIS RUN", "hey hey hey hye");
+            DownloadService.startOrStopAlarm(this, true);
+        }
 
     }
-
 
 
     @Override
@@ -200,7 +186,7 @@ public class TopicList extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
+                Log.i("IS THIS RUN", "ha ha ha ha");
                 Intent PreferenceActivity = new Intent(TopicList.this, SettingsActivity.class);
                 startActivityForResult(PreferenceActivity, RESULT);
                 assert (RESULT != -1);
