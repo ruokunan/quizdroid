@@ -58,7 +58,7 @@ public class DownloadService extends IntentService {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String refreshIntervalString = sharedPreferences.getString("download_interval", "5");
 
-            int refreshInterval =Integer.parseInt(refreshIntervalString); // 5 min x 60,000 milliseconds = total ms in 5 min
+            int refreshInterval =Integer.parseInt(refreshIntervalString) * 6000; // 5 min x 60,000 milliseconds = total ms in 5 min
 
             Log.i(TAG, "setting alarm to " + refreshInterval);
 
