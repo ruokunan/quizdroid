@@ -12,6 +12,7 @@
     <string name="title_activity_quiz_questions">QuizQuestions</string>
     <string name="title_activity_quiz_droid_model">QuizDroidModel</string>
     <string name="title_activity_answer">Answer</string>
+    <string name="title_activity_test">testActivity</string>
 
 
 </resources>
