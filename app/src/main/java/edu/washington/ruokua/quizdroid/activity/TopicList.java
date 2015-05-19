@@ -80,13 +80,7 @@ public class TopicList extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        DownloadService.startOrStopAlarm(this, false);
-        Log.i(TAG, "turn off receiver");
-        unregisterReceiver(receiver);
-    }
+
 
     // This is your receiver that you registered in the onCreate that will receive any messages that match a download-complete like broadcast
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -195,6 +189,14 @@ public class TopicList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DownloadService.startOrStopAlarm(this, false);
+        Log.i(TAG, "turn off receiver");
+        unregisterReceiver(receiver);
     }
 
 
