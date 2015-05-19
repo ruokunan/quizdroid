@@ -24,6 +24,10 @@
             android:name=".activity.QuizDroidModel"
             android:label="@string/topic_front_page" >
         </activity>
+        <activity
+            android:name=".activity.PreferenceActivity"
+            android:label="Setting" >
+        </activity>
 
     </application>
 
