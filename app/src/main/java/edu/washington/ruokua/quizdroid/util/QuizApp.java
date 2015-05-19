@@ -44,6 +44,8 @@ public class QuizApp extends Application {
     }
 
 
+
+
     /**
      *
      * @param topicIndex user select topic
