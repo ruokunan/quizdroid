@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.fragment.TopicOverviewFragment;
+import edu.washington.ruokua.quizdroid.util.QuizApp;
 
 /**
  * @author ruokunan
@@ -62,6 +62,7 @@ public class QuizDroidModel extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, PreferenceActivity.class));
             return true;
         }
 
