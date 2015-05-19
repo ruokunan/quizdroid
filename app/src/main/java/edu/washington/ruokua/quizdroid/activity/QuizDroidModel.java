@@ -3,9 +3,11 @@ package edu.washington.ruokua.quizdroid.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import edu.washington.ruokua.quizdroid.DownloadService;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.fragment.TopicOverviewFragment;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
@@ -24,7 +26,7 @@ public class QuizDroidModel extends AppCompatActivity {
 
     //the user select topic
     private int topicPosition;
-
+    private int RESULT = -1;
     /**
      * {@inheritDoc}
      */
@@ -46,6 +48,8 @@ public class QuizDroidModel extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -61,13 +65,26 @@ public class QuizDroidModel extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, PreferenceActivity.class));
+            Log.i("IS THIS RUN", "RUNRUNRUNERU");
+            Intent PreferenceActivity = new Intent(this, SettingsActivity.class);
+            startActivityForResult(PreferenceActivity, RESULT);
+            assert (RESULT != -1);
             return true;
-        }
 
-        return super.onOptionsItemSelected(item);
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+
+        if (requestCode == RESULT) {
+            Log.i("IS THIS RUN", "hey hey hey hye");
+            DownloadService.startOrStopAlarm(this, true);
+        }
+    }
+
+
 
 
 }

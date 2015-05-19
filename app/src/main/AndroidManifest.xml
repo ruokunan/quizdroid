@@ -25,9 +25,20 @@
             android:label="@string/topic_front_page" >
         </activity>
         <activity
-            android:name=".activity.PreferenceActivity"
+            android:name=".activity.SettingsActivity"
             android:label="Setting" >
         </activity>
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".DownloadService"
+            android:exported="false" >
+        </service>
 
     </application>
 
