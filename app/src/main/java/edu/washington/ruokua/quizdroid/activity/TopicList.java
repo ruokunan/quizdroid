@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -80,6 +82,31 @@ public class TopicList extends AppCompatActivity {
 
     }
 
+
+
+
+
+    /**
+     * Gets the state of Airplane Mode.
+     *
+     * @param context
+     * @return true if Airplane enabled.
+     */
+    @SuppressWarnings("deprecation")
+    private static boolean isAirplaneModeOn(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+        } else {
+            return Settings.Global.getInt(context.getContentResolver(),
+                    Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+        }
+
+
+    }
+
+
+ 
 
 
     // This is your receiver that you registered in the onCreate that will receive any messages that match a download-complete like broadcast
@@ -171,7 +198,7 @@ public class TopicList extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-                Log.i("IS THIS RUN", "ha ha ha ha");
+
                 Intent PreferenceActivity = new Intent(TopicList.this, SettingsActivity.class);
                 startActivityForResult(PreferenceActivity, RESULT);
                 assert (RESULT != -1);
@@ -188,7 +215,7 @@ public class TopicList extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == RESULT) {
-            Log.i("IS THIS RUN", "hey hey hey hye");
+
             DownloadService.startOrStopAlarm(this, true);
         }
 
@@ -201,6 +228,8 @@ public class TopicList extends AppCompatActivity {
         Log.i(TAG, "turn off receiver");
         unregisterReceiver(receiver);
     }
+
+
 
 
 }
