@@ -153,15 +153,6 @@ public class TopicList extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode == RESULT) {
-            Log.i("IS THIS RUN", "hey hey hey hye");
-            DownloadService.startOrStopAlarm(this, true);
-        }
-
-    }
 
 
     @Override
@@ -189,6 +180,18 @@ public class TopicList extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == RESULT) {
+            Log.i("IS THIS RUN", "hey hey hey hye");
+            DownloadService.startOrStopAlarm(this, true);
+        }
+
     }
 
     @Override
