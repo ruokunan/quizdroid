@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -42,9 +41,9 @@ public class DownloadService extends IntentService {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String url = sharedPreferences.getString("download_url", "");
 
-        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        downloadID = downloadManager.enqueue(request);
+//        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+//        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+//        downloadID = downloadManager.enqueue(request);
 
     }
 
