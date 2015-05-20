@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
@@ -106,7 +108,18 @@ public class TopicList extends AppCompatActivity {
     }
 
 
- 
+    /**
+     * Gets the state of NetWork Connect
+     *
+     * @param context
+     * @return true if the Mobile Phone has network connection
+     */
+    private static boolean haveNetworkConnection(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
 
     // This is your receiver that you registered in the onCreate that will receive any messages that match a download-complete like broadcast
