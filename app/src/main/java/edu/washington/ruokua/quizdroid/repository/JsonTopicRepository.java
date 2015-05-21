@@ -46,19 +46,12 @@ public class JsonTopicRepository implements TopicRepository {
 
         serverTopics = new ArrayList<>();
         this.context = context;
-        build();
-
-        assert (serverTopics != null);
-
-    }
-
-
-
-    public boolean build() {
         try {
             //Read in Json File
             InputStream inputStream = context.getAssets().
-                    open(QuestionJsonDownLoadReceiver.QUESTIONS_JSON_FILE);
+                    open(context.getFilesDir().getAbsolutePath() +
+                            QuestionJsonDownLoadReceiver.
+                                    QUESTIONS_JSON_FILE);
             ObjectMapper mapper = new ObjectMapper();
 
             jsonMappers = mapper.readValue(inputStream,
@@ -74,15 +67,20 @@ public class JsonTopicRepository implements TopicRepository {
             for (int i = 0; i < jsonMappers.size(); i++) {
                 serverTopics.add(createTopics(i));
             }
-
-            return true;
+            buildSucceed = true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            buildSucceed = false;
+
 
         }
 
+        assert (serverTopics != null);
+
     }
+
+
+
 
     /**
      * @return if the JsonTopicRepository successfully

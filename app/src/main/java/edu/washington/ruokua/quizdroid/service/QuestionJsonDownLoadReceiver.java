@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 
@@ -60,7 +61,7 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                         try {
                             // Get file from Download Manager (which is a system service as explained in the onCreate)
                             file = downloadManager.openDownloadedFile(downloadID);
-                            FileInputStream fis = new FileInputStream(file.getFileDescriptor());
+
 
                             // YOUR CODE HERE [convert file to String here]
 
@@ -68,8 +69,15 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                             //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
 
                             // convert your json to a string and echo it out here to show that you did download it
-                            String json = readJSONFile(fis);
-                            writeToFile(context, json);
+
+
+                            InputStream initialStream = new FileInputStream(file.getFileDescriptor());
+                            byte[] buffer = new byte[initialStream.available()];
+                            initialStream.read(buffer);
+
+                            File targetFile = new File(context.getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
+                            OutputStream outStream = new FileOutputStream(targetFile);
+                            outStream.write(buffer);
                             QuizApp quizApp = (QuizApp)context.getApplicationContext();
                             quizApp.updateRepository();
                                     /*
@@ -93,31 +101,6 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
     }
 
 
-    private String readJSONFile(InputStream inputStream) {
-        try {
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            return new String(buffer, CHARSET_NAME);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-
-    private void writeToFile(Context context, String json) {
-        try {
-            File file = new File(context.getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(json.getBytes());
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void onDownloadFAILED() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
