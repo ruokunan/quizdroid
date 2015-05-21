@@ -68,6 +68,7 @@ public class FrontPageAcitivity extends AppCompatActivity {
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
         registerReceiver(receiver, filter);
 
+
         QuizApp quizApp = (QuizApp) getApplication();
         ListView topicList = (ListView) findViewById(R.id.topic_list);
 

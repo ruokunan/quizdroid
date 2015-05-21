@@ -17,6 +17,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public static final String DOWNLOAD_URL ="download_url";
 
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "Alarm Received");
@@ -28,8 +30,18 @@ public class AlarmReceiver extends BroadcastReceiver {
         String toastMessage = "Download from the url {" + url + "}";
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
 
-        Intent download = new Intent(context, DownloadService.class);
-        context.startService(download);
+
+        BroadcastReceiver onComplete=new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                // your code
+
+                Intent download = new Intent(context, DownloadService.class);
+                context.startService(download);
+            }
+        };
+
+
+
     }
 
 }
