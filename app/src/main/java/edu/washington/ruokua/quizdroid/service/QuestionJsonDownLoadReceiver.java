@@ -61,7 +61,7 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                         try {
                             // Get file from Download Manager (which is a system service as explained in the onCreate)
                             file = downloadManager.openDownloadedFile(downloadID);
-                            FileInputStream fis = new FileInputStream(file.getFileDescriptor());
+                          //  FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
                             // YOUR CODE HERE [convert file to String here]
 
@@ -69,9 +69,9 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                             //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
 
                             // convert your json to a string and echo it out here to show that you did download it
-                            String json = readJSONFile(fis);
-                            writeToFile(context, json);
-                            Log.i("MyApp - Here is the j:", json);
+                            //String json = readJSONFile(fis);
+                           // writeToFile(context, json);
+                            //Log.i("MyApp - Here is the j:", json);
                                     /*
                                     String jsonString = ....myjson...to string().... chipotle burritos.... blah
                                     Log.i("MyApp - Here is the json we download:", jsonString);

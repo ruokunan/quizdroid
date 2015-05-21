@@ -6,6 +6,7 @@ import android.util.Log;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,8 +49,7 @@ public class JsonTopicRepository implements TopicRepository {
         this.context = context;
         try {
             //Read in Json File
-            InputStream inputStream = context.getAssets().
-                    open(context.getFilesDir().getAbsolutePath() +"/" +QuestionJsonDownLoadReceiver.
+            InputStream inputStream =new FileInputStream(context.getFilesDir().getAbsolutePath() +"/" +QuestionJsonDownLoadReceiver.
                                     QUESTIONS_JSON_FILE);
             ObjectMapper mapper = new ObjectMapper();
 
