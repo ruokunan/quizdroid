@@ -15,8 +15,7 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = AlarmReceiver.class.getName();
 
-    public static final String DOWNLOAD_URL ="download_url";
-
+    public static final String DOWNLOAD_URL = "download_url";
 
 
     @Override
@@ -25,22 +24,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String url = sharedPreferences.getString(DOWNLOAD_URL, null);
-        assert(url != null);
+        assert (url != null);
 
         String toastMessage = "Download from the url {" + url + "}";
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
 
 
-        BroadcastReceiver onComplete=new BroadcastReceiver() {
-            public void onReceive(Context context, Intent intent) {
-                // your code
-
-                Intent download = new Intent(context, DownloadService.class);
-                context.startService(download);
-            }
-        };
-
-
+        Intent download = new Intent(context, DownloadService.class);
+        context.startService(download);
+    
 
     }
 
