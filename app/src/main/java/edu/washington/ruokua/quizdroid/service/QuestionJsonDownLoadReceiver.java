@@ -64,20 +64,21 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                             Log.i("begin write", " begin write");
 
                             InputStream initialStream = new FileInputStream(file.getFileDescriptor());
-                            if(initialStream == null) {
+                            if(file == null) {
                                 onDownloadFAILED();
-                                return;
+
+                            } else {
+                                byte[] buffer = new byte[initialStream.available()];
+                                initialStream.read(buffer);
+
+
+                                File targetFile = new File(context.getFilesDir().getAbsolutePath(), "/" +
+                                        QUESTIONS_JSON_FILE);
+                                OutputStream outStream = new FileOutputStream(targetFile);
+                                outStream.write(buffer);
+                                QuizApp quizApp = (QuizApp) context.getApplicationContext();
+                                quizApp.updateRepository();
                             }
-                            byte[] buffer = new byte[initialStream.available()];
-                            initialStream.read(buffer);
-
-
-                            File targetFile = new File(context.getFilesDir().getAbsolutePath(), "/" +
-                                    QUESTIONS_JSON_FILE);
-                            OutputStream outStream = new FileOutputStream(targetFile);
-                            outStream.write(buffer);
-                            QuizApp quizApp = (QuizApp)context.getApplicationContext();
-                            quizApp.updateRepository();
                         } catch (IOException e) {
                             e.printStackTrace();
                             onDownloadFAILED();
