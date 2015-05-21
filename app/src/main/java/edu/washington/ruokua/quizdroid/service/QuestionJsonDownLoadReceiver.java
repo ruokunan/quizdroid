@@ -59,28 +59,18 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                         StringBuffer strContent = new StringBuffer("");
 
                         try {
-                            // Get file from Download Manager (which is a system service as explained in the onCreate)
                             file = downloadManager.openDownloadedFile(downloadID);
-                          //  FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
-                            // YOUR CODE HERE [convert file to String here]
-
-                            // YOUR CODE HERE [write string to data/data.json]
-                            //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
-
-                            // convert your json to a string and echo it out here to show that you did download it
-                            //String json = readJSONFile(fis);
-                           // writeToFile(context, json);
-                            //Log.i("MyApp - Here is the j:", json);
-                                    /*
-                                    String jsonString = ....myjson...to string().... chipotle burritos.... blah
-                                    Log.i("MyApp - Here is the json we download:", jsonString);
-                                    */
                             Log.i("begin write", " begin write");
 
                             InputStream initialStream = new FileInputStream(file.getFileDescriptor());
+                            if(initialStream == null) {
+                                onDownloadFAILED();
+                                return;
+                            }
                             byte[] buffer = new byte[initialStream.available()];
                             initialStream.read(buffer);
+
 
                             File targetFile = new File(context.getFilesDir().getAbsolutePath(), "/" +
                                     QUESTIONS_JSON_FILE);
@@ -90,9 +80,12 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                             quizApp.updateRepository();
                         } catch (IOException e) {
                             e.printStackTrace();
+                            onDownloadFAILED();
+
+                            Log.e("tag", "please class this one");
                         }
 
-                    } else if (status == DownloadManager.STATUS_FAILED) {
+                    } else  {
                         onDownloadFAILED();
                         // YOUR CODE HERE! Your download has failed! Now what do you want it to do? Retry? Quit application? up to you!
 
