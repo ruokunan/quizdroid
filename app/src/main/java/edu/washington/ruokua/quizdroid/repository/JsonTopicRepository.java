@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.activity.TopicList;
 import edu.washington.ruokua.quizdroid.jsonObject.QuestionTemplate;
 import edu.washington.ruokua.quizdroid.jsonObject.TopicTemplate;
 import edu.washington.ruokua.quizdroid.util.Question;
@@ -31,12 +32,10 @@ public class JsonTopicRepository implements TopicRepository {
 
     private String TAG = JsonTopicRepository.class.getName();
 
-    private String FILE_NAME= "questions.json";
+
 
     /**
-     *
      * @param context the context of this topic repository
-     *
      * @effects: initialize an JonTopic Repository and by read given file
      * @effects: fill servertopics with  topic with only title and short description
      */
@@ -46,7 +45,7 @@ public class JsonTopicRepository implements TopicRepository {
         serverTopics = new ArrayList<>();
         try {
             //Read in Json File
-            InputStream inputStream = context.getAssets().open(FILE_NAME);
+            InputStream inputStream = context.getAssets().open(TopicList.QUESTIONS_JSON_FILE);
             ObjectMapper mapper = new ObjectMapper();
 
             jsonMappers = mapper.readValue(inputStream,
@@ -56,10 +55,10 @@ public class JsonTopicRepository implements TopicRepository {
             Log.d(TAG, jsonMappers.get(0).toString());
 
 
-            buildSucceed  = true;
+            buildSucceed = true;
 
             //Build topic from parsed data
-            for (int i = 0; i < jsonMappers.size();i++) {
+            for (int i = 0; i < jsonMappers.size(); i++) {
                 serverTopics.add(createTopics(i));
             }
         } catch (IOException e) {
@@ -74,7 +73,6 @@ public class JsonTopicRepository implements TopicRepository {
 
 
     /**
-     *
      * @return if the JsonTopicRepository successfully
      * Read in Json File
      */
@@ -84,7 +82,6 @@ public class JsonTopicRepository implements TopicRepository {
 
 
     /**
-     *
      * {@inheritDoc}
      */
     @Override
@@ -97,7 +94,6 @@ public class JsonTopicRepository implements TopicRepository {
 
     /**
      * {@inheritDoc}
-
      */
     @Override
     public Topic getCurrentTopic(int topicIndex) {
@@ -118,7 +114,6 @@ public class JsonTopicRepository implements TopicRepository {
     }
 
     /**
-     *
      * @param topicIndex the index of given topic
      * @return construct a list of question for given topic from
      * the parsed Json Data

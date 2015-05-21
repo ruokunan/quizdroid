@@ -23,8 +23,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -42,14 +44,20 @@ import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
 public class TopicList extends AppCompatActivity {
     private DownloadManager downloadManager;
     private int RESULT = 0;
-    private static final int INVALID = -1;
-    private static final String TAG = TopicList.class.getName();
+    private  final int INVALID = 0;
+    private final String TAG = TopicList.class.getName();
 
     /**
      * {@inheritDoc}
      * <p/>
      * Display a List of topics on which allow user to take quiz
      * When user click the topic on the list, head to the overview of that topic
+     * <p/>
+     * Check the network connection, display a message to user if there
+     * is no network connection
+     * <p/>
+     * if the user turn the airplane mode on cause no network connection
+     * ask user if turned airplane mode off
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +97,8 @@ public class TopicList extends AppCompatActivity {
 
         //Check the network connection
         if (!isNetworkConnectionOn(this)) {
-            Log.d(TAG," internet connection unavailable...");
-            if(isAirplaneModeOn(this)) {
+            Log.d(TAG, " internet connection unavailable...");
+            if (isAirplaneModeOn(this)) {
                 onAirplaneModeOn(this);
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -102,16 +110,14 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-    /**
-     * Ask if user want to turn off airplane mode,
-     * take user to the setting if user would like to turn off airplane mode
-     * @param context
-     */
-    protected void onAirplaneModeOn(final Context context) {
+    // Ask if user want to turn off airplane mode,
+    // take user to the setting if user would like to turn off airplane mode
+    private void onAirplaneModeOn(final Context context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setMessage("No Internet Connection")
+        builder.setMessage("No Internet Connection, Would you like " +
+                "turn the AirPlane Mode off")
                 .setTitle("AirPlane Mode On");
 
         builder.setPositiveButton("Turn off AirPlane Mode", new DialogInterface.OnClickListener() {
@@ -134,14 +140,10 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-    /**
-     * Gets the state of Airplane Mode.
-     *
-     * @param context
-     * @return true if Airplane enabled.
-     */
+    //Gets the state of Airplane Mode.
+    //@return true if Airplane enabled.
     @SuppressWarnings("deprecation")
-    private  boolean isAirplaneModeOn(Context context) {
+    private boolean isAirplaneModeOn(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return Settings.System.getInt(context.getContentResolver(),
                     Settings.System.AIRPLANE_MODE_ON, INVALID) != INVALID;
@@ -154,13 +156,10 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-    /**
-     * Gets the state of NetWork Connect
-     *
-     * @param context
-     * @return true if the Mobile Phone has network connection
-     */
-    private  boolean isNetworkConnectionOn(Context context) {
+
+    // Gets the state of NetWork Connect
+    // @return true if the Mobile Phone has network connection
+    private boolean isNetworkConnectionOn(Context context) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -168,7 +167,8 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-    // This is your receiver that you registered in the onCreate that will receive any messages that match a download-complete like broadcast
+    // This is your receiver that you registered in the onCreate that will receive any messages
+    // that match a download-complete like broadcast
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -192,45 +192,40 @@ public class TopicList extends AppCompatActivity {
                     if (c.moveToFirst()) {
                         int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                         Log.d("DM Sample", "Status Check: " + status);
-                        switch (status) {
-                            case DownloadManager.STATUS_PAUSED:
-                            case DownloadManager.STATUS_PENDING:
-                            case DownloadManager.STATUS_RUNNING:
-                                break;
-                            case DownloadManager.STATUS_SUCCESSFUL:
-                                // The download-complete message said the download was "successfu" then run this code
-                                ParcelFileDescriptor file;
-                                StringBuffer strContent = new StringBuffer("");
+                        if (status == DownloadManager.STATUS_SUCCESSFUL) {
 
-                                try {
-                                    // Get file from Download Manager (which is a system service as explained in the onCreate)
-                                    file = downloadManager.openDownloadedFile(downloadID);
-                                    FileInputStream fis = new FileInputStream(file.getFileDescriptor());
+                            // The download-complete message said the download was "successfu" then run this code
+                            ParcelFileDescriptor file;
+                            StringBuffer strContent = new StringBuffer("");
 
-                                    // YOUR CODE HERE [convert file to String here]
+                            try {
+                                // Get file from Download Manager (which is a system service as explained in the onCreate)
+                                file = downloadManager.openDownloadedFile(downloadID);
+                                FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
+                                // YOUR CODE HERE [convert file to String here]
+                                String json = readJSONFile(fis);
+                                // YOUR CODE HERE [write string to data/data.json]
+                                //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
 
-                                    // YOUR CODE HERE [write string to data/data.json]
-                                    //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
-
-                                    // convert your json to a string and echo it out here to show that you did download it
-
-
+                                // convert your json to a string and echo it out here to show that you did download it
+                                String data = "";
+                                writeToFile(data);
 
                                     /*
                                     String jsonString = ....myjson...to string().... chipotle burritos.... blah
                                     Log.i("MyApp - Here is the json we download:", jsonString);
                                     */
 
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case DownloadManager.STATUS_FAILED:
-                                // YOUR CODE HERE! Your download has failed! Now what do you want it to do? Retry? Quit application? up to you!
-                                break;
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else if (status == DownloadManager.STATUS_FAILED) {
+                            // YOUR CODE HERE! Your download has failed! Now what do you want it to do? Retry? Quit application? up to you!
+
                         }
                     }
                 }
@@ -238,7 +233,20 @@ public class TopicList extends AppCompatActivity {
         }
     };
 
-
+    public void writeToFile(String data) {
+        try {
+            File file = new File(getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(data.getBytes());
+            fos.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /*
+     * {@inheritDoc}
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -246,6 +254,10 @@ public class TopicList extends AppCompatActivity {
         return true;
     }
 
+
+    /*
+     * {@inheritDoc}
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -255,10 +267,8 @@ public class TopicList extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
             Intent PreferenceActivity = new Intent(TopicList.this, SettingsActivity.class);
             startActivityForResult(PreferenceActivity, RESULT);
-            assert (RESULT != -1);
             return true;
 
         }
@@ -266,17 +276,24 @@ public class TopicList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /*
+     * {@inheritDoc}
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT) {
+//        if (requestCode == PICK_CONTACT_REQUEST) {
+//            if (resultCode == RESULT_OK) {
 
-            DownloadService.startOrStopAlarm(this, true);
-        }
+        DownloadService.startOrStopAlarm(this, true);
+//            }
+//        }
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
