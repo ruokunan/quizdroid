@@ -1,12 +1,16 @@
 package edu.washington.ruokua.quizdroid.service;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.ParcelFileDescriptor;
+import android.provider.Settings;
 import android.util.Log;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 
@@ -94,7 +99,7 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
     }
 
 
-    public String readJSONFile(InputStream inputStream) {
+    private String readJSONFile(InputStream inputStream) {
         try {
             int size = inputStream.available();
             byte[] buffer = new byte[size];
@@ -119,4 +124,31 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
             e.printStackTrace();
         }
     }
+
+    private void onDownloadFAILED(Context contexts) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setMessage("No Internet Connection, Would you like " +
+                "turn the AirPlane Mode off")
+                .setTitle("AirPlane Mode On");
+
+        builder.setPositiveButton("Turn off AirPlane Mode", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
+                settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(settingsIntent);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
 }

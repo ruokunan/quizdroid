@@ -38,14 +38,12 @@ import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
 public class FrontPageAcitivity extends AppCompatActivity {
     private DownloadManager downloadManager;
     private int RESULT = 0;
-    private  final int INVALID = 0;
+    private final int INVALID = 0;
     private final String TAG = FrontPageAcitivity.class.getName();
-
-
-
     // This is your receiver that you registered in the onCreate that will receive any messages
     // that match a download-complete like broadcast
-    private final BroadcastReceiver receiver = new QuestionJsonDownLoadReceiver();
+    private final BroadcastReceiver receiver =
+            new QuestionJsonDownLoadReceiver((QuizApp) getApplication());
 
     /**
      * {@inheritDoc}
@@ -156,7 +154,6 @@ public class FrontPageAcitivity extends AppCompatActivity {
     }
 
 
-
     // Gets the state of NetWork Connect
     // @return true if the Mobile Phone has network connection
     private boolean isNetworkConnectionOn(Context context) {
@@ -165,8 +162,6 @@ public class FrontPageAcitivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
-
 
 
     /*
