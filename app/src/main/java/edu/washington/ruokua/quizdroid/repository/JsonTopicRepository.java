@@ -11,9 +11,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.activity.TopicList;
 import edu.washington.ruokua.quizdroid.jsonObject.QuestionTemplate;
 import edu.washington.ruokua.quizdroid.jsonObject.TopicTemplate;
+import edu.washington.ruokua.quizdroid.service.QuestionJsonDownLoadReceiver;
 import edu.washington.ruokua.quizdroid.util.Question;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
@@ -30,6 +30,8 @@ public class JsonTopicRepository implements TopicRepository {
     // Hold a list of TopicTemplate from parsed data
     private List<TopicTemplate> jsonMappers;
 
+    private Context context;
+
     private String TAG = JsonTopicRepository.class.getName();
 
 
@@ -43,9 +45,20 @@ public class JsonTopicRepository implements TopicRepository {
     public JsonTopicRepository(Context context) {
 
         serverTopics = new ArrayList<>();
+        context = this.context;
+        build();
+
+        assert (serverTopics != null);
+
+    }
+
+
+
+    public boolean build() {
         try {
             //Read in Json File
-            InputStream inputStream = context.getAssets().open(TopicList.QUESTIONS_JSON_FILE);
+            InputStream inputStream = context.getAssets().
+                    open(QuestionJsonDownLoadReceiver.QUESTIONS_JSON_FILE);
             ObjectMapper mapper = new ObjectMapper();
 
             jsonMappers = mapper.readValue(inputStream,
@@ -55,22 +68,21 @@ public class JsonTopicRepository implements TopicRepository {
             Log.d(TAG, jsonMappers.get(0).toString());
 
 
-            buildSucceed = true;
+
 
             //Build topic from parsed data
             for (int i = 0; i < jsonMappers.size(); i++) {
                 serverTopics.add(createTopics(i));
             }
+
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
-            buildSucceed = false;
+            return false;
 
         }
 
-        assert (serverTopics != null);
-
     }
-
 
     /**
      * @return if the JsonTopicRepository successfully

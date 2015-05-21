@@ -13,13 +13,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
+import edu.washington.ruokua.quizdroid.util.QuizApp;
 
 /**
  * Created by ruokua on 5/20/15.
  */
 public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
     public static final String QUESTIONS_JSON_FILE = "questions.json";
+    public static final String CHARSET_NAME =  "UTF-8";
+    private QuizApp quizApp;
 
+    public  QuestionJsonDownLoadReceiver(QuizApp quizApp) {
+        this.quizApp = quizApp;
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -61,9 +69,9 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                             //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
 
                             // convert your json to a string and echo it out here to show that you did download it
-                            String json = "";
+                            String json = readJSONFile(fis);
                             writeToFile(context, json);
-
+                            quizApp.updateRepository();
                                     /*
                                     String jsonString = ....myjson...to string().... chipotle burritos.... blah
                                     Log.i("MyApp - Here is the json we download:", jsonString);
@@ -84,6 +92,22 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
         }
 
     }
+
+
+    public String readJSONFile(InputStream inputStream) {
+        try {
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            return new String(buffer, CHARSET_NAME);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
     private void writeToFile(Context context, String json) {
         try {

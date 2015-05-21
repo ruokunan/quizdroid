@@ -11,7 +11,7 @@ import edu.washington.ruokua.quizdroid.util.Topic;
  */
 public class Repository implements TopicRepository {
     private TopicRepository repository;
-
+    private JsonTopicRepository jsonTopicRepository;
     /**
      *
      * @param context
@@ -19,13 +19,19 @@ public class Repository implements TopicRepository {
      * otherwise use hardcode data
      */
     public Repository(Context context) {
-        JsonTopicRepository jsonTopicRepository = new JsonTopicRepository(context);
+        jsonTopicRepository = new JsonTopicRepository(context);
         if(jsonTopicRepository.isBuildSucceed()) {
             repository = jsonTopicRepository;
         } else {
             repository =  new InMemoryTopicRepository();
         }
 
+    }
+
+    public void update() {
+        if(jsonTopicRepository.build()) {
+            repository = jsonTopicRepository;
+        }
     }
 
     /**

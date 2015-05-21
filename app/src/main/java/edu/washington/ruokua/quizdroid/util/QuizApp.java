@@ -6,7 +6,6 @@ import android.util.Log;
 import java.util.List;
 
 import edu.washington.ruokua.quizdroid.repository.Repository;
-import edu.washington.ruokua.quizdroid.repository.TopicRepository;
 
 /**
  * Created by ruokua on 5/8/15.
@@ -17,7 +16,7 @@ public class QuizApp extends Application {
     private static final String TAG = QuizApp.class.getName();
     private int topicIndex;
     private int MINIMAL_TOPIC_INDEX = 0;
-    private TopicRepository repository;
+    private Repository repository;
 
 
 
@@ -43,7 +42,9 @@ public class QuizApp extends Application {
         }
     }
 
-
+    public void updateRepository() {
+        repository.update();
+    }
 
 
     /**

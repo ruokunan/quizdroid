@@ -22,7 +22,7 @@ import edu.washington.ruokua.quizdroid.util.QuizApp;
  *         if user decided take quiz on that topic
  */
 
-public class QuizDroidModel extends AppCompatActivity {
+public class TakeQuizActivity extends AppCompatActivity {
 
     //the user select topic
     private int topicPosition;

@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.washington.ruokua.quizdroid.activity.FrontPageAcitivity;
+import edu.washington.ruokua.quizdroid.activity.TakeQuizActivity;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.R;
-import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
-import edu.washington.ruokua.quizdroid.activity.TopicList;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
 
@@ -46,8 +46,8 @@ public class AnswerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_answer, container, false);
 
 
-        QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
-        QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
+        TakeQuizActivity takeQuizActivity= (TakeQuizActivity)getActivity();
+        QuizApp quizApp = (QuizApp) takeQuizActivity.getApplication();
         currentTopic =  quizApp.getCurrentTopic();
 
         //Display the Select Answer for current problem
@@ -103,7 +103,7 @@ public class AnswerFragment extends Fragment {
 
                 } else {
                     currentTopic.reset();
-                    Intent backToFront = new Intent(getActivity(), TopicList.class);
+                    Intent backToFront = new Intent(getActivity(), FrontPageAcitivity.class);
                     startActivity(backToFront);
                 }
 

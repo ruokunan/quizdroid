@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.washington.ruokua.quizdroid.R;
-import edu.washington.ruokua.quizdroid.activity.QuizDroidModel;
+import edu.washington.ruokua.quizdroid.activity.TakeQuizActivity;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.util.Topic;
 
@@ -39,7 +39,7 @@ public class TopicOverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_topic_overview, container, false);
 
 
-        QuizDroidModel QuizDroid = (QuizDroidModel)getActivity();
+        TakeQuizActivity QuizDroid = (TakeQuizActivity)getActivity();
         QuizApp quizApp = (QuizApp)QuizDroid.getApplication();
         Topic currentTopic =  quizApp.getCurrentTopic();
 

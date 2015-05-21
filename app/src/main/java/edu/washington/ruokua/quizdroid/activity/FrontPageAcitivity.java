@@ -7,12 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,11 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 import edu.washington.ruokua.quizdroid.R;
@@ -42,18 +35,18 @@ import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
  *         Provide user a list of topic
  *         a user could select one topic to take quiz
  */
-public class TopicList extends AppCompatActivity {
+public class FrontPageAcitivity extends AppCompatActivity {
     private DownloadManager downloadManager;
     private int RESULT = 0;
     private  final int INVALID = 0;
-    private final String TAG = TopicList.class.getName();
+    private final String TAG = FrontPageAcitivity.class.getName();
 
 
 
     // This is your receiver that you registered in the onCreate that will receive any messages
     // that match a download-complete like broadcast
     private final BroadcastReceiver receiver = new QuestionJsonDownLoadReceiver();
-    
+
     /**
      * {@inheritDoc}
      * <p/>
@@ -94,7 +87,7 @@ public class TopicList extends AppCompatActivity {
         //when user click the topic on the list, head to the overview of the topic
         topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent topicDesc = new Intent(TopicList.this, QuizDroidModel.class);
+                Intent topicDesc = new Intent(FrontPageAcitivity.this, TakeQuizActivity.class);
                 topicDesc.putExtra("topicPosition", position);
                 startActivity(topicDesc);
 
@@ -175,17 +168,7 @@ public class TopicList extends AppCompatActivity {
 
 
 
-    public void writeToFile(String data) {
-        try {
-            File file = new File(getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(data.getBytes());
-            fos.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
     /*
      * {@inheritDoc}
      */
@@ -209,7 +192,7 @@ public class TopicList extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent PreferenceActivity = new Intent(TopicList.this, SettingsActivity.class);
+            Intent PreferenceActivity = new Intent(FrontPageAcitivity.this, SettingsActivity.class);
             startActivityForResult(PreferenceActivity, RESULT);
             return true;
 

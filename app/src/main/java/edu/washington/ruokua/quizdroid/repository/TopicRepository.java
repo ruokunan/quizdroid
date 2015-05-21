@@ -21,4 +21,6 @@ public interface TopicRepository {
      * @return topic the user decided to take quiz on
      */
     public Topic getCurrentTopic(int topicIndex);
+
+
 }
