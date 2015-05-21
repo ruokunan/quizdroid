@@ -15,13 +15,16 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = AlarmReceiver.class.getName();
 
+    public static final String DOWNLOAD_URL ="download_url";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "Alarm Received");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String url = sharedPreferences.getString("download_url", null);
+        String url = sharedPreferences.getString(DOWNLOAD_URL, null);
         assert(url != null);
+
         String toastMessage = "Download from the url {" + url + "}";
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
 

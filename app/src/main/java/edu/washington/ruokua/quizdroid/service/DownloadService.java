@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -16,7 +17,9 @@ import android.util.Log;
 public class DownloadService extends IntentService {
     private DownloadManager downloadManager;
     private long downloadID;
-     private static final String TAG = DownloadService.class.getName();
+    public  static final String DEFAULT_DOWNLOAD_URL =
+            "http://tednewardsandbox.site44.com/questions.json";
+    private static final String TAG = DownloadService.class.getName();
 
     public DownloadService() {
         super("DownloadService");
@@ -39,11 +42,12 @@ public class DownloadService extends IntentService {
         // Specify the url you want to download here
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String url = sharedPreferences.getString("download_url", "");
+        String url = sharedPreferences.getString(AlarmReceiver.DOWNLOAD_URL, DEFAULT_DOWNLOAD_URL);
 
-//        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-//        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-//        downloadID = downloadManager.enqueue(request);
+
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        downloadID = downloadManager.enqueue(request);
 
     }
 

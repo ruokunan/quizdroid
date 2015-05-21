@@ -17,7 +17,7 @@
 
 
         <EditTextPreference
-            android:defaultValue="http://QuizURL/questions.json"
+            android:defaultValue="http://tednewardsandbox.site44.com/questions.json"
             android:key="download_url"
             android:summary="Please enter enter the download quiz url."
             android:title="Quiz URL" />

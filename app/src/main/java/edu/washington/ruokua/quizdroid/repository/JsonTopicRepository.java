@@ -25,7 +25,7 @@ public class JsonTopicRepository implements TopicRepository {
     private List<Topic> serverTopics;
     //The bias use to correct the index of answer when parse each answer
     private final int ORDINAL_NUMBER_BIAS = 1;
-    //Indicate if this Repository read in data successfully
+    //Indicate if this RepositoryManager read in data successfully
     private boolean buildSucceed;
     // Hold a list of TopicTemplate from parsed data
     private List<TopicTemplate> jsonMappers;
@@ -38,14 +38,14 @@ public class JsonTopicRepository implements TopicRepository {
 
     /**
      * @param context the context of this topic repository
-     * @effects: initialize an JonTopic Repository and by read given file
+     * @effects: initialize an JonTopic RepositoryManager and by read given file
      * @effects: fill servertopics with  topic with only title and short description
      */
 
     public JsonTopicRepository(Context context) {
 
         serverTopics = new ArrayList<>();
-        context = this.context;
+        this.context = context;
         build();
 
         assert (serverTopics != null);

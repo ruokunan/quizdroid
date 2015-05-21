@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
 /**
  * Created by ruokua on 5/8/15.
  * {@inheritDoc}
- * This Topic Repository stay in the memory
+ * This Topic RepositoryManager stay in the memory
  */
 public class InMemoryTopicRepository implements TopicRepository {
     //title of the topic

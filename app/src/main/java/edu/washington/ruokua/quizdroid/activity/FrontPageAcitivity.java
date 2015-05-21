@@ -42,8 +42,7 @@ public class FrontPageAcitivity extends AppCompatActivity {
     private final String TAG = FrontPageAcitivity.class.getName();
     // This is your receiver that you registered in the onCreate that will receive any messages
     // that match a download-complete like broadcast
-    private final BroadcastReceiver receiver =
-            new QuestionJsonDownLoadReceiver((QuizApp) getApplication());
+    private final BroadcastReceiver receiver = new QuestionJsonDownLoadReceiver();
 
     /**
      * {@inheritDoc}
@@ -154,9 +153,11 @@ public class FrontPageAcitivity extends AppCompatActivity {
     }
 
 
-    // Gets the state of NetWork Connect
-    // @return true if the Mobile Phone has network connection
-    private boolean isNetworkConnectionOn(Context context) {
+    /**
+     *  Gets the state of NetWork Connect
+     *  @return true if the Mobile Phone has network connection
+     */
+    public boolean isNetworkConnectionOn(Context context) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.repository.Repository;
+import edu.washington.ruokua.quizdroid.repository.RepositoryManager;
 
 /**
  * Created by ruokua on 5/8/15.
@@ -16,7 +16,7 @@ public class QuizApp extends Application {
     private static final String TAG = QuizApp.class.getName();
     private int topicIndex;
     private int MINIMAL_TOPIC_INDEX = 0;
-    private Repository repository;
+    private RepositoryManager repository;
 
 
 
@@ -28,7 +28,7 @@ public class QuizApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.repository =  new Repository(getApplicationContext());
+        this.repository =  new RepositoryManager(getApplicationContext());
         Log.i(TAG, "The QuizApp successfully constructed");
     }
 

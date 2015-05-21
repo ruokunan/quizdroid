@@ -6,7 +6,7 @@ import edu.washington.ruokua.quizdroid.util.Topic;
 
 /**
  * @author Ruokun An
- * @interface Repository
+ * @interface RepositoryManager
  */
 public interface TopicRepository {
 
