@@ -30,13 +30,13 @@
         </activity>
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".service.AlarmReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>
 
         <service
-            android:name=".DownloadService"
+            android:name=".service.DownloadService"
             android:exported="false" >
         </service>
 

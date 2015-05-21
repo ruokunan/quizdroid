@@ -1,8 +1,10 @@
 package edu.washington.ruokua.quizdroid.activity;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -19,14 +21,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import edu.washington.ruokua.quizdroid.DownloadService;
 import edu.washington.ruokua.quizdroid.R;
+import edu.washington.ruokua.quizdroid.service.DownloadService;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.util.Topic;
 import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
@@ -39,6 +42,7 @@ import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
 public class TopicList extends AppCompatActivity {
     private DownloadManager downloadManager;
     private int RESULT = 0;
+    private static final int INVALID = -1;
     private static final String TAG = TopicList.class.getName();
 
     /**
@@ -66,9 +70,11 @@ public class TopicList extends AppCompatActivity {
         if (topics == null) {
             throw new RuntimeException("There is not any topic exist in the repository");
         }
+
         TopicListAdapter items = new TopicListAdapter(this,
                 R.layout.topic_list_item, topics);
         topicList.setAdapter(items);
+
 
         //when user click the topic on the list, head to the overview of the topic
         topicList.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -81,11 +87,50 @@ public class TopicList extends AppCompatActivity {
             }
         });
 
+        //Check the network connection
+        if (isNetworkConnectionOn(this) == false) {
+            Log.d(TAG," internet connection unavailable...");
+            if(isNetworkConnectionOn(this)) {
+                onAirplaneModeOn(this);
+            } else {
+                Toast.makeText(this, "No Internet Connection",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
 
     }
 
 
 
+
+    //
+    protected void onAirplaneModeOn(final Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setMessage("Would you like to Turn AirPlane Mode off" +
+                "in order to access server")
+                .setTitle("AirPlane Mode On");
+
+        builder.setPositiveButton("Turn off AirPlane Mode", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
+                settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(settingsIntent);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+    }
 
 
     /**
@@ -95,13 +140,13 @@ public class TopicList extends AppCompatActivity {
      * @return true if Airplane enabled.
      */
     @SuppressWarnings("deprecation")
-    private static boolean isAirplaneModeOn(Context context) {
+    private  boolean isAirplaneModeOn(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return Settings.System.getInt(context.getContentResolver(),
-                    Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+                    Settings.System.AIRPLANE_MODE_ON, INVALID) != INVALID;
         } else {
             return Settings.Global.getInt(context.getContentResolver(),
-                    Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+                    Settings.Global.AIRPLANE_MODE_ON, INVALID) != INVALID;
         }
 
 
@@ -114,7 +159,7 @@ public class TopicList extends AppCompatActivity {
      * @param context
      * @return true if the Mobile Phone has network connection
      */
-    private static boolean haveNetworkConnection(Context context) {
+    private  boolean isNetworkConnectionOn(Context context) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -128,7 +173,7 @@ public class TopicList extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+            downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
             Log.i("MyApp BroadcastReceiver", "onReceive of registered download reciever");
 
@@ -143,10 +188,10 @@ public class TopicList extends AppCompatActivity {
                     DownloadManager.Query query = new DownloadManager.Query();
                     query.setFilterById(downloadID);
                     Cursor c = downloadManager.query(query);
-                    if(c.moveToFirst()) {
+                    if (c.moveToFirst()) {
                         int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
-                        Log.d("DM Sample","Status Check: "+status);
-                        switch(status) {
+                        Log.d("DM Sample", "Status Check: " + status);
+                        switch (status) {
                             case DownloadManager.STATUS_PAUSED:
                             case DownloadManager.STATUS_PENDING:
                             case DownloadManager.STATUS_RUNNING:
@@ -162,7 +207,6 @@ public class TopicList extends AppCompatActivity {
                                     FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
                                     // YOUR CODE HERE [convert file to String here]
-
 
 
                                     // YOUR CODE HERE [write string to data/data.json]
@@ -194,7 +238,6 @@ public class TopicList extends AppCompatActivity {
     };
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -212,10 +255,10 @@ public class TopicList extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-                Intent PreferenceActivity = new Intent(TopicList.this, SettingsActivity.class);
-                startActivityForResult(PreferenceActivity, RESULT);
-                assert (RESULT != -1);
-                return true;
+            Intent PreferenceActivity = new Intent(TopicList.this, SettingsActivity.class);
+            startActivityForResult(PreferenceActivity, RESULT);
+            assert (RESULT != -1);
+            return true;
 
         }
 
@@ -223,10 +266,9 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT) {
 
             DownloadService.startOrStopAlarm(this, true);
@@ -241,8 +283,6 @@ public class TopicList extends AppCompatActivity {
         Log.i(TAG, "turn off receiver");
         unregisterReceiver(receiver);
     }
-
-
 
 
 }

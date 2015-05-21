@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

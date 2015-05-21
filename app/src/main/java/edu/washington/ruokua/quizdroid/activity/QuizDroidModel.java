@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import edu.washington.ruokua.quizdroid.DownloadService;
+import edu.washington.ruokua.quizdroid.service.DownloadService;
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.fragment.TopicOverviewFragment;
 import edu.washington.ruokua.quizdroid.util.QuizApp;

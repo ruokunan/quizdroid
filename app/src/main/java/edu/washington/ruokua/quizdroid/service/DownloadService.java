@@ -1,4 +1,4 @@
-package edu.washington.ruokua.quizdroid;
+package edu.washington.ruokua.quizdroid.service;
 
 import android.app.AlarmManager;
 import android.app.DownloadManager;
