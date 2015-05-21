@@ -77,7 +77,7 @@ public class FrontPageAcitivity extends AppCompatActivity {
                 Toast.makeText(this, "No Internet Connection",
                         Toast.LENGTH_LONG).show();
             }
-        } 
+        }
         QuizApp quizApp = (QuizApp) getApplication();
         ListView topicList = (ListView) findViewById(R.id.topic_list);
 
@@ -96,12 +96,13 @@ public class FrontPageAcitivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent topicDesc = new Intent(FrontPageAcitivity.this, TakeQuizActivity.class);
                 topicDesc.putExtra("topicPosition", position);
+
+
                 startActivity(topicDesc);
-
-
             }
-        });
 
+
+        });
 
 
     }
@@ -154,8 +155,9 @@ public class FrontPageAcitivity extends AppCompatActivity {
 
 
     /**
-     *  Gets the state of NetWork Connect
-     *  @return true if the Mobile Phone has network connection
+     * Gets the state of NetWork Connect
+     *
+     * @return true if the Mobile Phone has network connection
      */
     public boolean isNetworkConnectionOn(Context context) {
         ConnectivityManager connectivityManager =

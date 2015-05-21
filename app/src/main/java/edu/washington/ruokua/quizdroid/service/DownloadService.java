@@ -46,6 +46,7 @@ public class DownloadService extends IntentService {
         downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         long downloadID = downloadManager.enqueue(request);
+        Log.i(TAG,downloadID + "");
     }
 
     public static void startOrStopAlarm(Context context, boolean on) {
