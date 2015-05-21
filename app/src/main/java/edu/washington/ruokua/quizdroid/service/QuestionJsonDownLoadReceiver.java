@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import edu.washington.ruokua.quizdroid.activity.FrontPageAcitivity;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 
 /**
@@ -60,14 +61,16 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
 
                         try {
                             file = downloadManager.openDownloadedFile(downloadID);
-
-                            Log.i("begin write", " begin write");
-
-                            InputStream initialStream = new FileInputStream(file.getFileDescriptor());
                             if(file == null) {
                                 onDownloadFAILED();
 
+
+
+
+
                             } else {
+                                Log.i("begin write", " begin write");
+                                InputStream initialStream = new FileInputStream(file.getFileDescriptor());
                                 byte[] buffer = new byte[initialStream.available()];
                                 initialStream.read(buffer);
 
@@ -78,6 +81,11 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                                 outStream.write(buffer);
                                 QuizApp quizApp = (QuizApp) context.getApplicationContext();
                                 quizApp.updateRepository();
+
+                                Intent topicDesc = new Intent(context.getApplicationContext(), FrontPageAcitivity.class);
+                                  context.startActivity(topicDesc);
+
+
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -68,7 +68,16 @@ public class FrontPageAcitivity extends AppCompatActivity {
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
         registerReceiver(receiver, filter);
 
-
+        //Check the network connection
+        if (!isNetworkConnectionOn(this)) {
+            Log.d(TAG, " internet connection unavailable...");
+            if (isAirplaneModeOn(this)) {
+                onAirplaneModeOn(this);
+            } else {
+                Toast.makeText(this, "No Internet Connection",
+                        Toast.LENGTH_LONG).show();
+            }
+        } 
         QuizApp quizApp = (QuizApp) getApplication();
         ListView topicList = (ListView) findViewById(R.id.topic_list);
 
@@ -93,16 +102,6 @@ public class FrontPageAcitivity extends AppCompatActivity {
             }
         });
 
-        //Check the network connection
-        if (!isNetworkConnectionOn(this)) {
-            Log.d(TAG, " internet connection unavailable...");
-            if (isAirplaneModeOn(this)) {
-                onAirplaneModeOn(this);
-            } else {
-                Toast.makeText(this, "No Internet Connection",
-                        Toast.LENGTH_LONG).show();
-            }
-        }
 
 
     }
@@ -191,6 +190,7 @@ public class FrontPageAcitivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent PreferenceActivity = new Intent(FrontPageAcitivity.this, SettingsActivity.class);
             startActivityForResult(PreferenceActivity, RESULT);
+
             return true;
 
         }

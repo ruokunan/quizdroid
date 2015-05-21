@@ -34,6 +34,7 @@ public class RepositoryManager implements TopicRepository {
         jsonTopicRepository = new JsonTopicRepository(context);
         if(jsonTopicRepository.isBuildSucceed()) {
             repository = jsonTopicRepository;
+
         }
     }
 
