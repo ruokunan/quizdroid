@@ -86,11 +86,10 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                                         QUESTIONS_JSON_FILE);
 
                                 InputStream testStream = new FileInputStream(testFile);
-                                InputStream inputStream =new FileInputStream(context.getFilesDir().getAbsolutePath() +"/" +QuestionJsonDownLoadReceiver.
-                                        QUESTIONS_JSON_FILE);
+
                                 ObjectMapper mapper = new ObjectMapper();
 
-                               List<TopicTemplate> jsonMappers = mapper.readValue(inputStream,
+                               List<TopicTemplate> jsonMappers = mapper.readValue(testStream,
                                         new TypeReference<List<TopicTemplate>>() {
                                         });
 
