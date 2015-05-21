@@ -32,6 +32,7 @@ import java.util.List;
 
 import edu.washington.ruokua.quizdroid.R;
 import edu.washington.ruokua.quizdroid.service.DownloadService;
+import edu.washington.ruokua.quizdroid.service.QuestionJsonDownLoadReceiver;
 import edu.washington.ruokua.quizdroid.util.QuizApp;
 import edu.washington.ruokua.quizdroid.util.Topic;
 import edu.washington.ruokua.quizdroid.util.TopicListAdapter;
@@ -47,6 +48,12 @@ public class TopicList extends AppCompatActivity {
     private  final int INVALID = 0;
     private final String TAG = TopicList.class.getName();
 
+
+
+    // This is your receiver that you registered in the onCreate that will receive any messages
+    // that match a download-complete like broadcast
+    private final BroadcastReceiver receiver = new QuestionJsonDownLoadReceiver();
+    
     /**
      * {@inheritDoc}
      * <p/>
@@ -167,71 +174,6 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-    // This is your receiver that you registered in the onCreate that will receive any messages
-    // that match a download-complete like broadcast
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-
-            Log.i("MyApp BroadcastReceiver", "onReceive of registered download reciever");
-
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                Log.i("MyApp BroadcastReceiver", "download complete!");
-                long downloadID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-
-                // if the downloadID exists
-                if (downloadID != 0) {
-
-                    // Check status
-                    DownloadManager.Query query = new DownloadManager.Query();
-                    query.setFilterById(downloadID);
-                    Cursor c = downloadManager.query(query);
-                    if (c.moveToFirst()) {
-                        int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
-                        Log.d("DM Sample", "Status Check: " + status);
-                        if (status == DownloadManager.STATUS_SUCCESSFUL) {
-
-                            // The download-complete message said the download was "successfu" then run this code
-                            ParcelFileDescriptor file;
-                            StringBuffer strContent = new StringBuffer("");
-
-                            try {
-                                // Get file from Download Manager (which is a system service as explained in the onCreate)
-                                file = downloadManager.openDownloadedFile(downloadID);
-                                FileInputStream fis = new FileInputStream(file.getFileDescriptor());
-
-                                // YOUR CODE HERE [convert file to String here]
-                                String json = readJSONFile(fis);
-                                // YOUR CODE HERE [write string to data/data.json]
-                                //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
-
-                                // convert your json to a string and echo it out here to show that you did download it
-                                String data = "";
-                                writeToFile(data);
-
-                                    /*
-                                    String jsonString = ....myjson...to string().... chipotle burritos.... blah
-                                    Log.i("MyApp - Here is the json we download:", jsonString);
-                                    */
-
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        } else if (status == DownloadManager.STATUS_FAILED) {
-                            // YOUR CODE HERE! Your download has failed! Now what do you want it to do? Retry? Quit application? up to you!
-
-                        }
-                    }
-                }
-            }
-        }
-    };
 
     public void writeToFile(String data) {
         try {

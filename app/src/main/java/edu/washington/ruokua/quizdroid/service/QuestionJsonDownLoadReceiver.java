@@ -17,14 +17,16 @@ import java.io.IOException;
 /**
  * Created by ruokua on 5/20/15.
  */
-public class DownLoadReceiver extends BroadcastReceiver {
+public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
     public static final String QUESTIONS_JSON_FILE = "questions.json";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService
+                (context.DOWNLOAD_SERVICE);
 
         Log.i("MyApp BroadcastReceiver", "onReceive of registered download reciever");
 
@@ -54,7 +56,7 @@ public class DownLoadReceiver extends BroadcastReceiver {
                             FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
                             // YOUR CODE HERE [convert file to String here]
-                            String json = readJSONFile(fis);
+
                             // YOUR CODE HERE [write string to data/data.json]
                             //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
 
@@ -89,8 +91,7 @@ public class DownLoadReceiver extends BroadcastReceiver {
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(json.getBytes());
             fos.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
