@@ -32,7 +32,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Intent download = new Intent(context, DownloadService.class);
         context.startService(download);
-    
+
 
     }
 

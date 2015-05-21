@@ -49,9 +49,9 @@ public class JsonTopicRepository implements TopicRepository {
         try {
             //Read in Json File
             InputStream inputStream = context.getAssets().
-                    open(context.getFilesDir().getAbsolutePath() +
+                    open(String.format("%s/%s", context.getFilesDir().getAbsolutePath(),
                             QuestionJsonDownLoadReceiver.
-                                    QUESTIONS_JSON_FILE);
+                            QUESTIONS_JSON_FILE));
             ObjectMapper mapper = new ObjectMapper();
 
             jsonMappers = mapper.readValue(inputStream,
