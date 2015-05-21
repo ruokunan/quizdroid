@@ -61,7 +61,7 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                         try {
                             // Get file from Download Manager (which is a system service as explained in the onCreate)
                             file = downloadManager.openDownloadedFile(downloadID);
-
+                            FileInputStream fis = new FileInputStream(file.getFileDescriptor());
 
                             // YOUR CODE HERE [convert file to String here]
 
@@ -69,22 +69,25 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
                             //      [hint, i wrote a writeFile method in MyApp... figure out how to call that from inside this Activity]
 
                             // convert your json to a string and echo it out here to show that you did download it
-
+                            String json = readJSONFile(fis);
+                            writeToFile(context, json);
+                            Log.i("MyApp - Here is the j:", json);
+                                    /*
+                                    String jsonString = ....myjson...to string().... chipotle burritos.... blah
+                                    Log.i("MyApp - Here is the json we download:", jsonString);
+                                    */
+                            Log.i("begin write", " begin write");
 
                             InputStream initialStream = new FileInputStream(file.getFileDescriptor());
                             byte[] buffer = new byte[initialStream.available()];
                             initialStream.read(buffer);
 
-                            File targetFile = new File(context.getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
+                            File targetFile = new File(context.getFilesDir().getAbsolutePath(), "/" +
+                                    QUESTIONS_JSON_FILE);
                             OutputStream outStream = new FileOutputStream(targetFile);
                             outStream.write(buffer);
                             QuizApp quizApp = (QuizApp)context.getApplicationContext();
                             quizApp.updateRepository();
-                                    /*
-                                    String jsonString = ....myjson...to string().... chipotle burritos.... blah
-                                    Log.i("MyApp - Here is the json we download:", jsonString);
-                                    */
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -101,6 +104,31 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
     }
 
 
+    private String readJSONFile(InputStream inputStream) {
+        try {
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            return new String(buffer, CHARSET_NAME);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+
+    private void writeToFile(Context context, String json) {
+        try {
+            File file = new File(context.getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(json.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void onDownloadFAILED() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
