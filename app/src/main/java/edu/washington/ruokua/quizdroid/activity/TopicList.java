@@ -88,9 +88,9 @@ public class TopicList extends AppCompatActivity {
         });
 
         //Check the network connection
-        if (isNetworkConnectionOn(this) == false) {
+        if (!isNetworkConnectionOn(this)) {
             Log.d(TAG," internet connection unavailable...");
-            if(isNetworkConnectionOn(this)) {
+            if(isAirplaneModeOn(this)) {
                 onAirplaneModeOn(this);
             } else {
                 Toast.makeText(this, "No Internet Connection",
@@ -102,15 +102,16 @@ public class TopicList extends AppCompatActivity {
     }
 
 
-
-
-    //
+    /**
+     * Ask if user want to turn off airplane mode,
+     * take user to the setting if user would like to turn off airplane mode
+     * @param context
+     */
     protected void onAirplaneModeOn(final Context context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setMessage("Would you like to Turn AirPlane Mode off" +
-                "in order to access server")
+        builder.setMessage("No Internet Connection")
                 .setTitle("AirPlane Mode On");
 
         builder.setPositiveButton("Turn off AirPlane Mode", new DialogInterface.OnClickListener() {
