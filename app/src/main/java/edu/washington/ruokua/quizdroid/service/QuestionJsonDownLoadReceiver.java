@@ -106,32 +106,7 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
     }
 
 
-    private String readJSONFile(InputStream inputStream) {
-        try {
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            return new String(buffer, CHARSET_NAME);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-
-    private void writeToFile(Context context, String json) {
-        try {
-            File file = new File(context.getFilesDir().getAbsolutePath(), QUESTIONS_JSON_FILE);
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(json.getBytes());
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+  
     private void onDownloadFAILED() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -140,9 +115,13 @@ public class QuestionJsonDownLoadReceiver extends BroadcastReceiver {
 
         builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent settingsIntent = new Intent(Settings.ACTION_SETTINGS);
-                settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(settingsIntent);
+             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String url = sharedPreferences.getString("", "http://tednewardsandbox.site44.com/questions.json");
+
+              
+                DownloadManager downloadManager  = (DownloadManager)context.getSystemService(DOWNLOAD_SERVICE);
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                downloadManager.enqueue(request);
             }
         });
 
