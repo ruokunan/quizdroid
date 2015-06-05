@@ -79,7 +79,6 @@ public class TakeQuizActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
 
         if (requestCode == RESULT) {
-            Log.i("IS THIS RUN", "hey hey hey hye");
             DownloadService.startOrStopAlarm(this, true);
         }
     }
